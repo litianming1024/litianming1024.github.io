@@ -245,6 +245,143 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/09/15/TCP拥塞控制-经典算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天明">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="天明的小窝">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/15/TCP拥塞控制-经典算法/" itemprop="url">TCP拥塞控制-经典算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T08:41:58+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
+<p>路由器因无法处理高速率到达的流量而被迫丢弃数据信息的现象称为拥塞。当路由器处于上述状态时，我们就说出现了拥塞。即使仅有一条通信连接，也可能造成一个甚至多个路由器阻塞。若不采取对策，网络性能将大受影响以致瘫痪。在最坏情况下，甚至形成拥塞崩溃。为了避免或在一定程度上缓解这种状况，TCP通信的每一方实行拥塞控制机制。不同的TCP版本采取的规程和行为有所差异。</p>
+</blockquote>
+<p>上面是《TCP/IP详解卷1》对于拥塞控制的引言，相比《计算机网络-自顶向下》，《TCP/IP详解卷1》更为详细的讲述了不同种的算法原理。入门可以先从《计算机网络-自顶向下》读起，有个大致了解便可以，如果感兴趣再读《TCP/IP详解卷1》。<br>简单概括，拥塞控制包含3个方面：慢启动、拥塞避免、快速恢复。</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>在开始之前有几个概念要了解<br>拥塞窗口（congestion window）：记为cwnd，拥塞控制的关键参数，它描述源端在拥塞控制情况下一次最多能发送的数据包的数量。<br>慢启动阈值（slow start threshold）：记为ssthres，拥塞控制中慢启动阶段和拥塞避免阶段的分界点。</p>
+<h2 id="慢启动"><a href="#慢启动" class="headerlink" title="慢启动"></a>慢启动</h2><p>开始时，cwnd的值一般为1个MSS，发送端按照cwnd大小发送数据，在接收到一个数据段的ACK后，cwnd就增加一个MSS大小。cwnd的值会随着RTT呈指数增长。<br>例如，cwnd初始为1,接收到一个数据段的ACK后，cwnd增长到2,接着会发送两个数据段。如果成功接收到相应的新的ACK，cwnd会由2增长为4,以此类推。<br>结束：慢启动的结束有3种方式。  </p>
+<ol>
+<li>当cwnd的增长到达ssthresh，就进入拥塞避免模式。</li>
+<li>如果收到了了一个丢包提示，就将ssthresh的值设置为cwnd的一半，并将cwnd设置为1,重新进入慢启动过程。</li>
+<li>当收到3个重复的ACK，就执行一次快速重传并且进入快速恢复状态。</li>
+</ol>
+<h2 id="拥塞避免"><a href="#拥塞避免" class="headerlink" title="拥塞避免"></a>拥塞避免</h2><p>进入拥塞避免说明cwnd的值大约是上次遇到拥塞时的一半，这时不能盲目翻倍，而是每经过1个RTT使cwnd增加1个MSS。也就是说当收到一个ACK时，cwnd = cwnd + 1/cwnd，当每过一个RTT时，cwnd = cwnd + 1。<br>结束：拥塞避免的结束有两种可能。  </p>
+<ol>
+<li>当出现超时时，将ssthresh设置为当前cwnd值的一半，cwnd设置为1,重新进入慢启动过程。  </li>
+<li>当收到3个重复的ACK时，把ssthresh设置为cwnd的一半，再把cwnd设置为ssthresh（某些实现为ssthresh + 3），之后进入快速恢复。  </li>
+</ol>
+<h2 id="快速恢复"><a href="#快速恢复" class="headerlink" title="快速恢复"></a>快速恢复</h2><p>快速恢复就是指进入快速恢复前的一系列操作，即sssthresh设置为当前cwnd的一半，并将cwnd设置为ssthresh（某些版本为ssthresh + 3），之后进入拥塞避免状态。  </p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>《计算机网络-自顶向下》</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -401,7 +538,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -414,7 +551,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>

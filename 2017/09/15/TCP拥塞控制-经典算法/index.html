@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="校招," />
+  <meta name="keywords" content="TCP,拥塞控制," />
 
 
 
@@ -95,23 +95,18 @@
 
 
 
-<meta name="description" content="项目之后我只参加过一个项目，在没有任何经验的情况下几乎独立负责微信后台的编写。由于线程不安全出现了读脏数据的问题，这个问题深深困扰着我，虽然有临时的解决办法，但我却不知道问题的根源。这之后我没有再接着参与项目，而是在寻找出问题的原因。查找很多资料没有找到原因，于是我决定从头开始，从出问题的地方，“单例”和项目中其它的问题入手，漫长的学习之路开始了。从《深入理解JVM》、《设计模式》、《Java并发">
-<meta name="keywords" content="校招">
+<meta name="description" content="引言 路由器因无法处理高速率到达的流量而被迫丢弃数据信息的现象称为拥塞。当路由器处于上述状态时，我们就说出现了拥塞。即使仅有一条通信连接，也可能造成一个甚至多个路由器阻塞。若不采取对策，网络性能将大受影响以致瘫痪。在最坏情况下，甚至形成拥塞崩溃。为了避免或在一定程度上缓解这种状况，TCP通信的每一方实行拥塞控制机制。不同的TCP版本采取的规程和行为有所差异。  上面是《TCP/IP详解卷1》对于拥">
+<meta name="keywords" content="TCP,拥塞控制">
 <meta property="og:type" content="article">
-<meta property="og:title" content="其实我的校招之路早就结束了">
-<meta property="og:url" content="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/index.html">
+<meta property="og:title" content="TCP拥塞控制-经典算法">
+<meta property="og:url" content="http://litianming1024.github.io/2017/09/15/TCP拥塞控制-经典算法/index.html">
 <meta property="og:site_name" content="天明的小窝">
-<meta property="og:description" content="项目之后我只参加过一个项目，在没有任何经验的情况下几乎独立负责微信后台的编写。由于线程不安全出现了读脏数据的问题，这个问题深深困扰着我，虽然有临时的解决办法，但我却不知道问题的根源。这之后我没有再接着参与项目，而是在寻找出问题的原因。查找很多资料没有找到原因，于是我决定从头开始，从出问题的地方，“单例”和项目中其它的问题入手，漫长的学习之路开始了。从《深入理解JVM》、《设计模式》、《Java并发">
+<meta property="og:description" content="引言 路由器因无法处理高速率到达的流量而被迫丢弃数据信息的现象称为拥塞。当路由器处于上述状态时，我们就说出现了拥塞。即使仅有一条通信连接，也可能造成一个甚至多个路由器阻塞。若不采取对策，网络性能将大受影响以致瘫痪。在最坏情况下，甚至形成拥塞崩溃。为了避免或在一定程度上缓解这种状况，TCP通信的每一方实行拥塞控制机制。不同的TCP版本采取的规程和行为有所差异。  上面是《TCP/IP详解卷1》对于拥">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/1.jpg">
-<meta property="og:image" content="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/2.jpg">
-<meta property="og:image" content="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/3.png">
-<meta property="og:image" content="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/4.jpg">
-<meta property="og:updated_time" content="2017-09-14T09:37:07.813Z">
+<meta property="og:updated_time" content="2017-09-15T02:21:29.960Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="其实我的校招之路早就结束了">
-<meta name="twitter:description" content="项目之后我只参加过一个项目，在没有任何经验的情况下几乎独立负责微信后台的编写。由于线程不安全出现了读脏数据的问题，这个问题深深困扰着我，虽然有临时的解决办法，但我却不知道问题的根源。这之后我没有再接着参与项目，而是在寻找出问题的原因。查找很多资料没有找到原因，于是我决定从头开始，从出问题的地方，“单例”和项目中其它的问题入手，漫长的学习之路开始了。从《深入理解JVM》、《设计模式》、《Java并发">
-<meta name="twitter:image" content="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/1.jpg">
+<meta name="twitter:title" content="TCP拥塞控制-经典算法">
+<meta name="twitter:description" content="引言 路由器因无法处理高速率到达的流量而被迫丢弃数据信息的现象称为拥塞。当路由器处于上述状态时，我们就说出现了拥塞。即使仅有一条通信连接，也可能造成一个甚至多个路由器阻塞。若不采取对策，网络性能将大受影响以致瘫痪。在最坏情况下，甚至形成拥塞崩溃。为了避免或在一定程度上缓解这种状况，TCP通信的每一方实行拥塞控制机制。不同的TCP版本采取的规程和行为有所差异。  上面是《TCP/IP详解卷1》对于拥">
 
 
 
@@ -141,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/"/>
+  <link rel="canonical" href="http://litianming1024.github.io/2017/09/15/TCP拥塞控制-经典算法/"/>
 
 
 
 
 
-  <title>其实我的校招之路早就结束了 | 天明的小窝</title>
+  <title>TCP拥塞控制-经典算法 | 天明的小窝</title>
   
 
 
@@ -254,7 +249,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/">
+    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/09/15/TCP拥塞控制-经典算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="天明">
@@ -271,7 +266,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">其实我的校招之路早就结束了</h1>
+          <h1 class="post-title" itemprop="name headline">TCP拥塞控制-经典算法</h1>
         
 
         <div class="post-meta">
@@ -283,8 +278,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T13:49:04+08:00">
-                2017-09-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T08:41:58+08:00">
+                2017-09-15
               </time>
             
 
@@ -321,11 +316,24 @@
       
 
       
-        <h2 id="项目之后"><a href="#项目之后" class="headerlink" title="项目之后"></a>项目之后</h2><p>我只参加过一个项目，在没有任何经验的情况下几乎独立负责微信后台的编写。由于线程不安全出现了读脏数据的问题，这个问题深深困扰着我，虽然有临时的解决办法，但我却不知道问题的根源。这之后我没有再接着参与项目，而是在寻找出问题的原因。查找很多资料没有找到原因，于是我决定从头开始，从出问题的地方，“单例”和项目中其它的问题入手，漫长的学习之路开始了。从《深入理解JVM》、《设计模式》、《Java并发编程的艺术》直到接近半年后才搞清楚了问题的根源。当初的代码有太多不合理的地方了，我当时的水平已经尽力了，但是还不够。现在看来要改起来原先的SSH框架都要改不少。往后便想自己写一个权限管理系统骗Star来社招，光element-admin这个就花了寒假整整的两个月，只写好了一个表格控件，结合Spring Security要改出的动态权限系统更是由于对Spring框架的理解不足，2个月都没有进展。现在暂时搁置。</p>
-<h2 id="微光"><a href="#微光" class="headerlink" title="微光"></a>微光</h2><p>原本为以为校招只有985/211能参加，我能走的路只有毕业三年后的社招，直到知乎关注的一位用户说校招不一定看学历，又看了一下面经，发现问的问题正是我经了项目后在学习的，我的学校里没有人注意，甚至是我怀疑学习方向是否正确的东西。这给了我莫大的鼓励。<br><img src="/2017/09/14/其实我的校招之路早就结束了/1.jpg" alt="1.jpg" title=""></p>
-<h2 id="刷题之路"><a href="#刷题之路" class="headerlink" title="刷题之路"></a>刷题之路</h2><p>直到此时我才发现我的课程里没有算法，DFS、BFS、回溯、动态规划我都不会，实习生的笔试编程题全部都是暴力去想。TCP的状态图根本不会画，没听说过B树，排序算法只会写冒泡，没有看过JDK源码，没有学过编译原理。唯一有的只是零散的知识，但此时正是3月，一切还来的及。我已经知道秋招无望了，我的目的只是想通过一场笔试，拿到面试的机会。刷题之路便开始了，我捡起了大一就注册但没有刷几道题的leetcode。<br><img src="/2017/09/14/其实我的校招之路早就结束了/2.jpg" alt="2.jpg" title=""></p>
-<h2 id="注定"><a href="#注定" class="headerlink" title="注定"></a>注定</h2><p>虽然秋招开始不久，但结果不出所料，笔试的几家应该都没有回应，编程题只能做1道多，虽然选择应该不会太差，但是笔试通过已无望，更何况有一些笔试机会都没有。如果没有当初追寻问题根源的坚持，面试的知识点我根本一点也不会，正是因为如此第一次看《Java编程思想》的一年半后我才终于看懂大部分，《Effective Java》也能看懂大部分，Sprimg MVC的源码也能看懂一部分。这一阶段是我能力增长最快的阶段，即便如此和大佬的差距还是太大。我很感谢牛客网，感谢上面答疑、分享资料的同学，也很感谢给我内推的同学。<br><img src="/2017/09/14/其实我的校招之路早就结束了/3.png" alt="3.png" title=""><br><img src="/2017/09/14/其实我的校招之路早就结束了/4.jpg" alt="4.jpg" title=""></p>
-<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>我能走的只有社招了，好好维护GitHub和博客。虽然很羡慕那些公司的技术氛围，可以有很多机会学习新的技术，不用像我这样搞前后端分离和Restful就要试好几个月，能接触高并发，有导师指导，不会走很多弯路。但实力的差距摆在那里，我不会放下追逐的脚步，3年后我会再来。</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
+<p>路由器因无法处理高速率到达的流量而被迫丢弃数据信息的现象称为拥塞。当路由器处于上述状态时，我们就说出现了拥塞。即使仅有一条通信连接，也可能造成一个甚至多个路由器阻塞。若不采取对策，网络性能将大受影响以致瘫痪。在最坏情况下，甚至形成拥塞崩溃。为了避免或在一定程度上缓解这种状况，TCP通信的每一方实行拥塞控制机制。不同的TCP版本采取的规程和行为有所差异。</p>
+</blockquote>
+<p>上面是《TCP/IP详解卷1》对于拥塞控制的引言，相比《计算机网络-自顶向下》，《TCP/IP详解卷1》更为详细的讲述了不同种的算法原理。入门可以先从《计算机网络-自顶向下》读起，有个大致了解便可以，如果感兴趣再读《TCP/IP详解卷1》。<br>简单概括，拥塞控制包含3个方面：慢启动、拥塞避免、快速恢复。</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>在开始之前有几个概念要了解<br>拥塞窗口（congestion window）：记为cwnd，拥塞控制的关键参数，它描述源端在拥塞控制情况下一次最多能发送的数据包的数量。<br>慢启动阈值（slow start threshold）：记为ssthres，拥塞控制中慢启动阶段和拥塞避免阶段的分界点。</p>
+<h2 id="慢启动"><a href="#慢启动" class="headerlink" title="慢启动"></a>慢启动</h2><p>开始时，cwnd的值一般为1个MSS，发送端按照cwnd大小发送数据，在接收到一个数据段的ACK后，cwnd就增加一个MSS大小。cwnd的值会随着RTT呈指数增长。<br>例如，cwnd初始为1,接收到一个数据段的ACK后，cwnd增长到2,接着会发送两个数据段。如果成功接收到相应的新的ACK，cwnd会由2增长为4,以此类推。<br>结束：慢启动的结束有3种方式。  </p>
+<ol>
+<li>当cwnd的增长到达ssthresh，就进入拥塞避免模式。</li>
+<li>如果收到了了一个丢包提示，就将ssthresh的值设置为cwnd的一半，并将cwnd设置为1,重新进入慢启动过程。</li>
+<li>当收到3个重复的ACK，就执行一次快速重传并且进入快速恢复状态。</li>
+</ol>
+<h2 id="拥塞避免"><a href="#拥塞避免" class="headerlink" title="拥塞避免"></a>拥塞避免</h2><p>进入拥塞避免说明cwnd的值大约是上次遇到拥塞时的一半，这时不能盲目翻倍，而是每经过1个RTT使cwnd增加1个MSS。也就是说当收到一个ACK时，cwnd = cwnd + 1/cwnd，当每过一个RTT时，cwnd = cwnd + 1。<br>结束：拥塞避免的结束有两种可能。  </p>
+<ol>
+<li>当出现超时时，将ssthresh设置为当前cwnd值的一半，cwnd设置为1,重新进入慢启动过程。  </li>
+<li>当收到3个重复的ACK时，把ssthresh设置为cwnd的一半，再把cwnd设置为ssthresh（某些实现为ssthresh + 3），之后进入快速恢复。  </li>
+</ol>
+<h2 id="快速恢复"><a href="#快速恢复" class="headerlink" title="快速恢复"></a>快速恢复</h2><p>快速恢复就是指进入快速恢复前的一系列操作，即sssthresh设置为当前cwnd的一半，并将cwnd设置为ssthresh（某些版本为ssthresh + 3），之后进入拥塞避免状态。  </p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>《计算机网络-自顶向下》</p>
 
       
     </div>
@@ -343,7 +351,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/校招/" rel="tag"># 校招</a>
+            <a href="/tags/TCP/" rel="tag"># TCP</a>
+          
+            <a href="/tags/拥塞控制/" rel="tag"># 拥塞控制</a>
           
         </div>
       
@@ -356,15 +366,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/09/14/其实我的校招之路早就结束了/" rel="next" title="其实我的校招之路早就结束了">
+                <i class="fa fa-chevron-left"></i> 其实我的校招之路早就结束了
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/15/TCP拥塞控制-经典算法/" rel="prev" title="TCP拥塞控制-经典算法">
-                TCP拥塞控制-经典算法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -488,7 +498,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#项目之后"><span class="nav-number">1.</span> <span class="nav-text">项目之后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微光"><span class="nav-number">2.</span> <span class="nav-text">微光</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#刷题之路"><span class="nav-number">3.</span> <span class="nav-text">刷题之路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注定"><span class="nav-number">4.</span> <span class="nav-text">注定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">5.</span> <span class="nav-text">结语</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备"><span class="nav-number">2.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#慢启动"><span class="nav-number">3.</span> <span class="nav-text">慢启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拥塞避免"><span class="nav-number">4.</span> <span class="nav-text">拥塞避免</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速恢复"><span class="nav-number">5.</span> <span class="nav-text">快速恢复</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">5.1.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
             
 
           </div>
