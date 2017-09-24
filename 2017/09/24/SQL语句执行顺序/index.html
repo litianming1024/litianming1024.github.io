@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="校招," />
+  <meta name="keywords" content="数据库,SQL," />
 
 
 
@@ -95,23 +95,18 @@
 
 
 
-<meta name="description" content="项目之后我只参加过一个项目，在没有任何经验的情况下几乎独立负责微信后台的编写。由于线程不安全出现了读脏数据的问题，这个问题深深困扰着我，虽然有临时的解决办法，但我却不知道问题的根源。这之后我没有再接着参与项目，而是在寻找出问题的原因。查找很多资料没有找到原因，于是我决定从头开始，从出问题的地方，“单例”和项目中其它的问题入手，漫长的学习之路开始了。从《深入理解JVM》、《设计模式》、《Java并发">
-<meta name="keywords" content="校招">
+<meta name="description" content="引言SQL语句执行顺序是面试中的基础考点，理解SQL对于优化排错有重大的作用,这里从两篇文章摘取部分重要的内容 SQL查询步骤总结123456789(8)SELECT (9) DISTINCT (11) &amp;lt;TOP_specification&amp;gt; &amp;lt;select_list&amp;gt;(1) FROM &amp;lt;left_table&amp;gt;(3) &amp;lt;join_type&amp;gt; JOIN">
+<meta name="keywords" content="数据库,SQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="其实我的校招之路早就结束了">
-<meta property="og:url" content="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/index.html">
+<meta property="og:title" content="SQL语句执行顺序">
+<meta property="og:url" content="http://litianming1024.github.io/2017/09/24/SQL语句执行顺序/index.html">
 <meta property="og:site_name" content="天明的小窝">
-<meta property="og:description" content="项目之后我只参加过一个项目，在没有任何经验的情况下几乎独立负责微信后台的编写。由于线程不安全出现了读脏数据的问题，这个问题深深困扰着我，虽然有临时的解决办法，但我却不知道问题的根源。这之后我没有再接着参与项目，而是在寻找出问题的原因。查找很多资料没有找到原因，于是我决定从头开始，从出问题的地方，“单例”和项目中其它的问题入手，漫长的学习之路开始了。从《深入理解JVM》、《设计模式》、《Java并发">
+<meta property="og:description" content="引言SQL语句执行顺序是面试中的基础考点，理解SQL对于优化排错有重大的作用,这里从两篇文章摘取部分重要的内容 SQL查询步骤总结123456789(8)SELECT (9) DISTINCT (11) &amp;lt;TOP_specification&amp;gt; &amp;lt;select_list&amp;gt;(1) FROM &amp;lt;left_table&amp;gt;(3) &amp;lt;join_type&amp;gt; JOIN">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/1.jpg">
-<meta property="og:image" content="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/2.jpg">
-<meta property="og:image" content="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/3.png">
-<meta property="og:image" content="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/4.jpg">
-<meta property="og:updated_time" content="2017-09-14T09:37:07.813Z">
+<meta property="og:updated_time" content="2017-09-24T16:17:20.311Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="其实我的校招之路早就结束了">
-<meta name="twitter:description" content="项目之后我只参加过一个项目，在没有任何经验的情况下几乎独立负责微信后台的编写。由于线程不安全出现了读脏数据的问题，这个问题深深困扰着我，虽然有临时的解决办法，但我却不知道问题的根源。这之后我没有再接着参与项目，而是在寻找出问题的原因。查找很多资料没有找到原因，于是我决定从头开始，从出问题的地方，“单例”和项目中其它的问题入手，漫长的学习之路开始了。从《深入理解JVM》、《设计模式》、《Java并发">
-<meta name="twitter:image" content="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/1.jpg">
+<meta name="twitter:title" content="SQL语句执行顺序">
+<meta name="twitter:description" content="引言SQL语句执行顺序是面试中的基础考点，理解SQL对于优化排错有重大的作用,这里从两篇文章摘取部分重要的内容 SQL查询步骤总结123456789(8)SELECT (9) DISTINCT (11) &amp;lt;TOP_specification&amp;gt; &amp;lt;select_list&amp;gt;(1) FROM &amp;lt;left_table&amp;gt;(3) &amp;lt;join_type&amp;gt; JOIN">
 
 
 
@@ -141,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/"/>
+  <link rel="canonical" href="http://litianming1024.github.io/2017/09/24/SQL语句执行顺序/"/>
 
 
 
 
 
-  <title>其实我的校招之路早就结束了 | 天明的小窝</title>
+  <title>SQL语句执行顺序 | 天明的小窝</title>
   
 
 
@@ -264,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/">
+    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/09/24/SQL语句执行顺序/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="天明">
@@ -281,7 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">其实我的校招之路早就结束了</h1>
+          <h1 class="post-title" itemprop="name headline">SQL语句执行顺序</h1>
         
 
         <div class="post-meta">
@@ -293,8 +288,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T13:49:04+08:00">
-                2017-09-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-24T23:07:11+08:00">
+                2017-09-24
               </time>
             
 
@@ -331,11 +326,23 @@
       
 
       
-        <h2 id="项目之后"><a href="#项目之后" class="headerlink" title="项目之后"></a>项目之后</h2><p>我只参加过一个项目，在没有任何经验的情况下几乎独立负责微信后台的编写。由于线程不安全出现了读脏数据的问题，这个问题深深困扰着我，虽然有临时的解决办法，但我却不知道问题的根源。这之后我没有再接着参与项目，而是在寻找出问题的原因。查找很多资料没有找到原因，于是我决定从头开始，从出问题的地方，“单例”和项目中其它的问题入手，漫长的学习之路开始了。从《深入理解JVM》、《设计模式》、《Java并发编程的艺术》直到接近半年后才搞清楚了问题的根源。当初的代码有太多不合理的地方了，我当时的水平已经尽力了，但是还不够。现在看来要改起来原先的SSH框架都要改不少。往后便想自己写一个权限管理系统骗Star来社招，光element-admin这个就花了寒假整整的两个月，只写好了一个表格控件，结合Spring Security要改出的动态权限系统更是由于对Spring框架的理解不足，2个月都没有进展。现在暂时搁置。</p>
-<h2 id="微光"><a href="#微光" class="headerlink" title="微光"></a>微光</h2><p>原本为以为校招只有985/211能参加，我能走的路只有毕业三年后的社招，直到知乎关注的一位用户说校招不一定看学历，又看了一下面经，发现问的问题正是我经了项目后在学习的，我的学校里没有人注意，甚至是我怀疑学习方向是否正确的东西。这给了我莫大的鼓励。<br><img src="/2017/09/14/其实我的校招之路早就结束了/1.jpg" alt="1.jpg" title=""></p>
-<h2 id="刷题之路"><a href="#刷题之路" class="headerlink" title="刷题之路"></a>刷题之路</h2><p>直到此时我才发现我的课程里没有算法，DFS、BFS、回溯、动态规划我都不会，实习生的笔试编程题全部都是暴力去想。TCP的状态图根本不会画，没听说过B树，排序算法只会写冒泡，没有看过JDK源码，没有学过编译原理。唯一有的只是零散的知识，但此时正是3月，一切还来的及。我已经知道秋招无望了，我的目的只是想通过一场笔试，拿到面试的机会。刷题之路便开始了，我捡起了大一就注册但没有刷几道题的leetcode。<br><img src="/2017/09/14/其实我的校招之路早就结束了/2.jpg" alt="2.jpg" title=""></p>
-<h2 id="注定"><a href="#注定" class="headerlink" title="注定"></a>注定</h2><p>虽然秋招开始不久，但结果不出所料，笔试的几家应该都没有回应，编程题只能做1道多，虽然选择应该不会太差，但是笔试通过已无望，更何况有一些笔试机会都没有。如果没有当初追寻问题根源的坚持，面试的知识点我根本一点也不会，正是因为如此第一次看《Java编程思想》的一年半后我才终于看懂大部分，《Effective Java》也能看懂大部分，Sprimg MVC的源码也能看懂一部分。这一阶段是我能力增长最快的阶段，即便如此和大佬的差距还是太大。我很感谢牛客网，感谢上面答疑、分享资料的同学，也很感谢给我内推的同学。<br><img src="/2017/09/14/其实我的校招之路早就结束了/3.png" alt="3.png" title=""><br><img src="/2017/09/14/其实我的校招之路早就结束了/4.jpg" alt="4.jpg" title=""></p>
-<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>我能走的只有社招了，好好维护GitHub和博客。虽然很羡慕那些公司的技术氛围，可以有很多机会学习新的技术，不用像我这样搞前后端分离和Restful就要试好几个月，能接触高并发，有导师指导，不会走很多弯路。但实力的差距摆在那里，我不会放下追逐的脚步，3年后我会再来。</p>
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>SQL语句执行顺序是面试中的基础考点，理解SQL对于优化排错有重大的作用,这里从两篇文章摘取部分重要的内容</p>
+<h1 id="SQL查询步骤"><a href="#SQL查询步骤" class="headerlink" title="SQL查询步骤"></a>SQL查询步骤</h1><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">(8)SELECT (9) DISTINCT (11) &lt;TOP_specification&gt; &lt;select_list&gt;</div><div class="line">(1) FROM &lt;left_table&gt;</div><div class="line">(3) &lt;join_type&gt; JOIN &lt;right_table&gt;</div><div class="line">(2) ON &lt;join_condition&gt;</div><div class="line">(4) WHERE &lt;where_condition&gt;</div><div class="line">(5) GROUP BY &lt;group_by_list&gt;</div><div class="line">(6) WITH &#123;CUBE | ROLLUP&#125;</div><div class="line">(7) HAVING &lt;having_condition&gt;</div><div class="line">(10) ORDER BY &lt;order_by_list&gt;</div></pre></td></tr></table></figure>
+<p>这是对语句执行顺序的基本总结</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol>
+<li>FROM：对FROM子句中的前两个表执行笛卡尔积(交叉联接)，生成虚拟表VT1。</li>
+<li>ON：对VT1应用ON筛选器，只有那些使为真才被插入到VT2。</li>
+<li>OUTER (JOIN):如果指定了OUTER JOIN(相对于CROSS JOIN或INNER JOIN)，保留表中未找到匹配的行将作为外部行添加到VT2，生成VT3。如果FROM子句包含两个以上的表，则对上一个联接生成的结果表和下一个表重复执行步骤1到步骤3，直到处理完所有的表位置。</li>
+<li>WHERE：对VT3应用WHERE筛选器，只有使为true的行才插入VT4。</li>
+<li>GROUP BY：按GROUP BY子句中的列列表对VT4中的行进行分组，生成VT5。</li>
+<li>CUTE|ROLLUP：把超组插入VT5，生成VT6。</li>
+<li>HAVING：对VT6应用HAVING筛选器，只有使为true的组插入到VT7。</li>
+<li>SELECT：处理SELECT列表，产生VT8。</li>
+<li>DISTINCT：将重复的行从VT8中删除，产品VT9。</li>
+<li>ORDER BY：将VT9中的行按ORDER BY子句中的列列表顺序，生成一个游标(VC10)。</li>
+<li>TOP：从VC10的开始处选择指定数量或比例的行，生成表VT11，并返回给调用者。</li>
+</ol>
+<h1 id="引用文章"><a href="#引用文章" class="headerlink" title="引用文章"></a>引用文章</h1><p><a href="http://www.jianshu.com/p/bb19b6b0fdc3" target="_blank" rel="external">sql语句执行顺序</a><br><a href="http://www.jellythink.com/archives/924" target="_blank" rel="external">SQL逻辑查询语句执行顺序</a></p>
 
       
     </div>
@@ -353,7 +360,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/校招/" rel="tag"># 校招</a>
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
           
         </div>
       
@@ -366,15 +375,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/09/23/索引失效情况总结/" rel="next" title="索引失效情况总结">
+                <i class="fa fa-chevron-left"></i> 索引失效情况总结
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/15/TCP拥塞控制-经典算法/" rel="prev" title="TCP拥塞控制-经典算法">
-                TCP拥塞控制-经典算法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -508,7 +517,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#项目之后"><span class="nav-number">1.</span> <span class="nav-text">项目之后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微光"><span class="nav-number">2.</span> <span class="nav-text">微光</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#刷题之路"><span class="nav-number">3.</span> <span class="nav-text">刷题之路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注定"><span class="nav-number">4.</span> <span class="nav-text">注定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">5.</span> <span class="nav-text">结语</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL查询步骤"><span class="nav-number">2.</span> <span class="nav-text">SQL查询步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.1.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.2.</span> <span class="nav-text">简介</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引用文章"><span class="nav-number">3.</span> <span class="nav-text">引用文章</span></a></li></ol></div>
             
 
           </div>

@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="数据库,MySQL,索引," />
+  <meta name="keywords" content="数据库,SQL,索引," />
 
 
 
@@ -96,14 +96,14 @@
 
 
 <meta name="description" content="引言非常意外的收到了京东的面试，面试小姐姐问到了索引失效的情况，这是个很基础的问题，在这里做一下简单的总结，至于背后的原理会在后面解释。 索引失效的情况1.查询条件包含or如果查询条件包含or时，可能导致索引失效。当or左右查询字段只有一个是索引，该索引失效，只有当or左右查询字段均为索引时，才会生效。 2.like查询以%开头使用like模糊查询，当%在前时索引失效。 3.如果列类型是字符串，w">
-<meta name="keywords" content="数据库,MySQL,索引">
+<meta name="keywords" content="数据库,SQL,索引">
 <meta property="og:type" content="article">
 <meta property="og:title" content="索引失效情况总结">
 <meta property="og:url" content="http://litianming1024.github.io/2017/09/23/索引失效情况总结/index.html">
 <meta property="og:site_name" content="天明的小窝">
 <meta property="og:description" content="引言非常意外的收到了京东的面试，面试小姐姐问到了索引失效的情况，这是个很基础的问题，在这里做一下简单的总结，至于背后的原理会在后面解释。 索引失效的情况1.查询条件包含or如果查询条件包含or时，可能导致索引失效。当or左右查询字段只有一个是索引，该索引失效，只有当or左右查询字段均为索引时，才会生效。 2.like查询以%开头使用like模糊查询，当%在前时索引失效。 3.如果列类型是字符串，w">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-23T16:34:36.332Z">
+<meta property="og:updated_time" content="2017-09-24T15:06:45.942Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="索引失效情况总结">
 <meta name="twitter:description" content="引言非常意外的收到了京东的面试，面试小姐姐问到了索引失效的情况，这是个很基础的问题，在这里做一下简单的总结，至于背后的原理会在后面解释。 索引失效的情况1.查询条件包含or如果查询条件包含or时，可能导致索引失效。当or左右查询字段只有一个是索引，该索引失效，只有当or左右查询字段均为索引时，才会生效。 2.like查询以%开头使用like模糊查询，当%在前时索引失效。 3.如果列类型是字符串，w">
@@ -213,6 +213,16 @@
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
             归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
           </a>
         </li>
       
@@ -342,7 +352,7 @@
           
             <a href="/tags/数据库/" rel="tag"># 数据库</a>
           
-            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
           
             <a href="/tags/索引/" rel="tag"># 索引</a>
           
@@ -366,6 +376,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/24/SQL语句执行顺序/" rel="prev" title="SQL语句执行顺序">
+                SQL语句执行顺序 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -394,6 +408,8 @@
 
           
   <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMTAyOC83NTc3"></div>
     
   </div>
 
@@ -441,7 +457,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -453,10 +469,10 @@
             
             
             <div class="site-state-item site-state-tags">
-              
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">标签</span>
-              
+              </a>
             </div>
           
 
@@ -465,6 +481,14 @@
         
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/litianming1024" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
           
         </div>
 
@@ -532,7 +556,29 @@
         
 
 
+<script>
+  	var _mtac = {};
+  	(function() {
+  		var mta = document.createElement("script");
+  		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.4";
+  		mta.setAttribute("name", "MTAH5");
+  		mta.setAttribute("sid", "500527581");
 
+  		var s = document.getElementsByTagName("script")[0];
+  		s.parentNode.insertBefore(mta, s);
+  	})();
+</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=63752005";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -654,6 +700,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
