@@ -95,18 +95,18 @@
 
 
 
-<meta name="description" content="前言最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。 限制有些场景我们不能使用自定义变量  使用自定义变量的查询，无法使用查询缓存 不能在使用常量或者标识符的地方使用自定义变量，例如表名、列名、和LIMIT子句中 用户自定义变量的生命周期是在一个连接中有效，所以不能用它们来做连接间的通信 如果使用连接池或者持久话连接，自">
+<meta name="description" content="前言最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。下面的话大部分是从书上搬下来的。 限制有些场景我们不能使用自定义变量  使用自定义变量的查询，无法使用查询缓存 不能在使用常量或者标识符的地方使用自定义变量，例如表名、列名、和LIMIT子句中 用户自定义变量的生命周期是在一个连接中有效，所以不能用它们来做连接间的通信">
 <meta name="keywords" content="《高性能MySQL》,自定义变量">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL自定义变量小结">
 <meta property="og:url" content="http://litianming1024.github.io/2017/12/05/MySQL自定义变量小结/index.html">
 <meta property="og:site_name" content="天明的小窝">
-<meta property="og:description" content="前言最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。 限制有些场景我们不能使用自定义变量  使用自定义变量的查询，无法使用查询缓存 不能在使用常量或者标识符的地方使用自定义变量，例如表名、列名、和LIMIT子句中 用户自定义变量的生命周期是在一个连接中有效，所以不能用它们来做连接间的通信 如果使用连接池或者持久话连接，自">
+<meta property="og:description" content="前言最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。下面的话大部分是从书上搬下来的。 限制有些场景我们不能使用自定义变量  使用自定义变量的查询，无法使用查询缓存 不能在使用常量或者标识符的地方使用自定义变量，例如表名、列名、和LIMIT子句中 用户自定义变量的生命周期是在一个连接中有效，所以不能用它们来做连接间的通信">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-05T10:38:11.419Z">
+<meta property="og:updated_time" content="2017-12-07T12:59:33.376Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL自定义变量小结">
-<meta name="twitter:description" content="前言最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。 限制有些场景我们不能使用自定义变量  使用自定义变量的查询，无法使用查询缓存 不能在使用常量或者标识符的地方使用自定义变量，例如表名、列名、和LIMIT子句中 用户自定义变量的生命周期是在一个连接中有效，所以不能用它们来做连接间的通信 如果使用连接池或者持久话连接，自">
+<meta name="twitter:description" content="前言最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。下面的话大部分是从书上搬下来的。 限制有些场景我们不能使用自定义变量  使用自定义变量的查询，无法使用查询缓存 不能在使用常量或者标识符的地方使用自定义变量，例如表名、列名、和LIMIT子句中 用户自定义变量的生命周期是在一个连接中有效，所以不能用它们来做连接间的通信">
 
 
 
@@ -346,7 +346,7 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。下面的话大部分是从书上搬下来的。</p>
 <h1 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h1><p>有些场景我们不能使用自定义变量</p>
 <ul>
 <li>使用自定义变量的查询，无法使用查询缓存</li>
@@ -358,8 +358,31 @@
 <li>MySQL优化器在某些场景下可能会将这些变量优化掉，这可能导致代码不按预想的方式运行</li>
 <li>复制的顺序和赋值的时间点并不总是固定的，这依赖于优化器的决定。实际情况可能很让人困惑</li>
 <li>赋值符号:=的优先级非常低，所以需要注意，赋值表达式应该使用明确的括号</li>
-<li>使用未定义</li>
+<li>使用未定义变量不会产生任何语法错误</li>
 </ul>
+<h1 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h1><h2 id="1-优化排名语句"><a href="#1-优化排名语句" class="headerlink" title="1.优化排名语句"></a>1.优化排名语句</h2><p>用户自定义变量可以在给一个变量赋值的同时使用这个变量。用户自定义变量具有“左值”的特性。<br>来简单的实现一个rownumber的功能：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SET @rownum := 0;</div><div class="line">SELECT actor_id, @rownum := @rownum + 1 AS rownum FROM actor;</div></pre></td></tr></table></figure></p>
+<p>书中还给了一个复杂的例子来演示排名的写法，Leetcode的练习题中也有类似例子<a href="https://leetcode.com/problems/rank-scores/description/" target="_blank" rel="external">178. Rank Scores</a></p>
+<h2 id="2-避免重复查询刚刚更新的数据"><a href="#2-避免重复查询刚刚更新的数据" class="headerlink" title="2.避免重复查询刚刚更新的数据"></a>2.避免重复查询刚刚更新的数据</h2><p>例如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">UPDATE t1 SET lastUpdated = NOW() WHERE id = 1;</div><div class="line">SELECT lastUpdated FROM t1 FROM id = 1;</div></pre></td></tr></table></figure></p>
+<p>使用变量，可以改写为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">UPDATE t1 SET lastUpdated = NOW() WHERE id = 1 AND @now := NOW();</div><div class="line">SELECT @now;</div></pre></td></tr></table></figure></p>
+<p>改写后仍需要两个查询，需要两次网络来回，但是无需访问任何数据表</p>
+<h2 id="3-统计更新和插入的数量"><a href="#3-统计更新和插入的数量" class="headerlink" title="3.统计更新和插入的数量"></a>3.统计更新和插入的数量</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">INSERT INTO t1(c1, c2) VALUES(4, 4), (2,1), (3,1) ON DUPLICATE KEY UPDATE c1 = VALUES(c1) + (0 * (@x := @x + 1));</div></pre></td></tr></table></figure>
+<p>这个写法十分巧妙，每次由于冲突导致更新时对变量@x自增一次，然后再乘0来避免影响要更新的内容。同时MySQL的协议会返回被更改的总行数，所以不需要单独统计这个值。</p>
+<h2 id="4-确定取值的顺序"><a href="#4-确定取值的顺序" class="headerlink" title="4.确定取值的顺序"></a>4.确定取值的顺序</h2><p>用户自定义变量的一个最常见问题是没有注意到在赋值和读取变量的时候可能是在查询的不同阶段。<br>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SET @rownum := 0;</div><div class="line">SELECT actor_id, @rownum := @rownum + 1 as cnt</div><div class="line">FROM actor</div><div class="line">WHERE @rownum &lt;= 1</div></pre></td></tr></table></figure></p>
+<p>结果只返回了两条结果，似乎符合预期（实际读取变量和赋值不在同一阶段，但是没有影响到结果）。而<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">SET @rownum := 0;</div><div class="line">SELECT actor_id, @rownum := @rownum + 1 as cnt</div><div class="line">FROM actor</div><div class="line">WHERE @rownum &lt;= 1</div><div class="line">ORDER BY first_name;</div></pre></td></tr></table></figure></p>
+<p>却返回了200条结果，而且有cnt超过1的条目，通过explain语句我们发现<br><br>using filesort是造成这个问题的原因，WHERE条件是在文件排序操作之前取值的（ORDER BY导致一次性选取了所有满足WHERE条件的语句，换句话说，WHERE处的@rownum只读取了一次，值为0，所有数据都符合条件，WHERE执行在SELECT之前，之后不停给@rownum赋新值，我是这样理解的）。如果first_name有索引则结果正常，使用了覆盖索引并且没有触发filesort。</p>
+<h2 id="5-编写偷懒的UNION"><a href="#5-编写偷懒的UNION" class="headerlink" title="5.编写偷懒的UNION"></a>5.编写偷懒的UNION</h2><p>下面的查询会在两个地方查找一个用户——一个用户表，一个长时间不活跃的用户表，不活跃的用户表的目的是为了实现更高效的归档：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SELECT id FROM users WHERE id = 123</div><div class="line">UNION ALL</div><div class="line">SELECT id FROM users_archived WHERE id = 123;</div></pre></td></tr></table></figure></p>
+<p>上面的查询即使在users表中已经找到了记录，也还是会去users_archived中再查找一次。我们可以用UNION查询来抑制，只有当第一个表中没有数据时，才在第二个表中查询。只要在第一个表中找到记录就定义一个变量@found通过在结果列中做一次赋值来实现，然后将赋值放在函数GREATEST中来避免返回额外的数据。为了明确结果来自哪一个表，新增了一个包含表名的列。最后需要在查询的末尾将变量重置为NULL，保证遍历时不干扰后面的结果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SELECT GREATEST(@found := −1, id) AS id, &apos;users&apos; AS which_tbl</div><div class="line">FROM users WHERE id = 1</div><div class="line">UNION ALL</div><div class="line">SELECT id, &apos;users_archived&apos;FROM users_archived WHERE id = 1 AND @found IS NULL</div><div class="line">UNION ALL</div><div class="line">SELECT 1, &apos;reset&apos; FROM DUAL WHERE ( @found := NULL ) IS NOT NULL;</div></pre></td></tr></table></figure></p>
+<h2 id="6-用户自定义变量的其他用处"><a href="#6-用户自定义变量的其他用处" class="headerlink" title="6.用户自定义变量的其他用处"></a>6.用户自定义变量的其他用处</h2><ul>
+<li>查询运行是计算总数和平均值</li>
+<li>模拟GROUP语句中的函数FITST()和LAST()</li>
+<li>对大量数据做一些数据计算</li>
+<li>计算一个大表的MD5散列值</li>
+<li>编写一个样本处理函数，当样本中的数值超过某个边界值的时候将其变成0</li>
+<li>模拟读/写游标</li>
+<li>在SHOW语句的WHERE子句中加入变量值</li>
+</ul>
+<h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7.总结"></a>7.总结</h2><p>先了解SQL语句的执行顺序才能读懂这部分，其他用处我还没有试验。</p>
+<h2 id="8-参考资料"><a href="#8-参考资料" class="headerlink" title="8.参考资料"></a>8.参考资料</h2><p>《高性能MySQL》</p>
 
       
     </div>
@@ -534,7 +557,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#限制"><span class="nav-number">2.</span> <span class="nav-text">限制</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#限制"><span class="nav-number">2.</span> <span class="nav-text">限制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#适用场景"><span class="nav-number">3.</span> <span class="nav-text">适用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-优化排名语句"><span class="nav-number">3.1.</span> <span class="nav-text">1.优化排名语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-避免重复查询刚刚更新的数据"><span class="nav-number">3.2.</span> <span class="nav-text">2.避免重复查询刚刚更新的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-统计更新和插入的数量"><span class="nav-number">3.3.</span> <span class="nav-text">3.统计更新和插入的数量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-确定取值的顺序"><span class="nav-number">3.4.</span> <span class="nav-text">4.确定取值的顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-编写偷懒的UNION"><span class="nav-number">3.5.</span> <span class="nav-text">5.编写偷懒的UNION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-用户自定义变量的其他用处"><span class="nav-number">3.6.</span> <span class="nav-text">6.用户自定义变量的其他用处</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-总结"><span class="nav-number">3.7.</span> <span class="nav-text">7.总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-参考资料"><span class="nav-number">3.8.</span> <span class="nav-text">8.参考资料</span></a></li></ol></li></ol></div>
             
 
           </div>
