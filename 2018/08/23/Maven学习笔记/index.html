@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Maven," />
 
 
 
@@ -95,13 +95,20 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="天明的小窝">
-<meta property="og:url" content="http://litianming1024.github.io/index.html">
+<meta name="description" content="Maven学习笔记1. 是什么基于Java的跨平台项目管理及自动构建工具 2. 入门1234567891011121314&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt; &amp;lt;!--xml版本和编码方式 --&amp;gt;&amp;lt;!--project是pom.xml的根元素--&amp;gt;&amp;lt;project xmlns=&quot;http://maven.apache">
+<meta name="keywords" content="Maven">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Maven学习笔记">
+<meta property="og:url" content="http://litianming1024.github.io/2018/08/23/Maven学习笔记/index.html">
 <meta property="og:site_name" content="天明的小窝">
+<meta property="og:description" content="Maven学习笔记1. 是什么基于Java的跨平台项目管理及自动构建工具 2. 入门1234567891011121314&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt; &amp;lt;!--xml版本和编码方式 --&amp;gt;&amp;lt;!--project是pom.xml的根元素--&amp;gt;&amp;lt;project xmlns=&quot;http://maven.apache">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://litianming1024.github.io/2018/08/23/Maven学习笔记/私服的用途.png">
+<meta property="og:updated_time" content="2018-08-22T17:41:51.874Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="天明的小窝">
+<meta name="twitter:title" content="Maven学习笔记">
+<meta name="twitter:description" content="Maven学习笔记1. 是什么基于Java的跨平台项目管理及自动构建工具 2. 入门1234567891011121314&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt; &amp;lt;!--xml版本和编码方式 --&amp;gt;&amp;lt;!--project是pom.xml的根元素--&amp;gt;&amp;lt;project xmlns=&quot;http://maven.apache">
+<meta name="twitter:image" content="http://litianming1024.github.io/2018/08/23/Maven学习笔记/私服的用途.png">
 
 
 
@@ -131,13 +138,13 @@
 
 
 
-  <link rel="canonical" href="http://litianming1024.github.io/"/>
+  <link rel="canonical" href="http://litianming1024.github.io/2018/08/23/Maven学习笔记/"/>
 
 
 
 
 
-  <title>天明的小窝</title>
+  <title>Maven学习笔记 | 天明的小窝</title>
   
 
 
@@ -165,8 +172,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -249,9 +255,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -281,9 +287,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/23/Maven学习笔记/" itemprop="url">Maven学习笔记</a></h1>
+          <h1 class="post-title" itemprop="name headline">Maven学习笔记</h1>
         
 
         <div class="post-meta">
@@ -344,9 +348,7 @@
       
 
       
-        
-          
-            <h1 id="Maven学习笔记"><a href="#Maven学习笔记" class="headerlink" title="Maven学习笔记"></a>Maven学习笔记</h1><h2 id="1-是什么"><a href="#1-是什么" class="headerlink" title="1. 是什么"></a>1. 是什么</h2><p>基于Java的跨平台项目管理及自动构建工具</p>
+        <h1 id="Maven学习笔记"><a href="#Maven学习笔记" class="headerlink" title="Maven学习笔记"></a>Maven学习笔记</h1><h2 id="1-是什么"><a href="#1-是什么" class="headerlink" title="1. 是什么"></a>1. 是什么</h2><p>基于Java的跨平台项目管理及自动构建工具</p>
 <h2 id="2-入门"><a href="#2-入门" class="headerlink" title="2. 入门"></a>2. 入门</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt; <span class="comment">&lt;!--xml版本和编码方式 --&gt;</span></div><div class="line"><span class="comment">&lt;!--project是pom.xml的根元素--&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></span></div><div class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></div><div class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!--modelVersion指定了POM模型的版本，Maven2和3只能为4.0.0--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!--groupId定义项目属于哪个组，同项目所在的组织或者公司存在关联--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.demo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!--当前项目在组中唯一的ID--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-demo<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!--项目当前的版本号--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>以上是Maven项目的基本配置文件，其余的各项配置写在<code>&lt;project&gt;&lt;/project&gt;</code>标签内</p>
 <h2 id="3-坐标和依赖"><a href="#3-坐标和依赖" class="headerlink" title="3. 坐标和依赖"></a>3. 坐标和依赖</h2><h3 id="3-1-入门"><a href="#3-1-入门" class="headerlink" title="3.1 入门"></a>3.1 入门</h3><p>我们先看一组坐标定义<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.sonatype.nexus<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>nexus-indexer<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></div></pre></td></tr></table></figure></p>
@@ -646,8 +648,6 @@
 <li><a href="http://ifeve.com/introduction-to-optional-and-excludes-dependencies/" target="_blank" rel="external">Maven官方指南</a></li>
 </ul>
 
-          
-        
       
     </div>
     
@@ -662,312 +662,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/12/05/MySQL自定义变量小结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="天明">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="天明的小窝">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/05/MySQL自定义变量小结/" itemprop="url">MySQL自定义变量小结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-05T16:59:32+08:00">
-                2017-12-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/Maven/" rel="tag"># Maven</a>
           
-            
-          
-
-          
-          
-             <span id="/2017/12/05/MySQL自定义变量小结/" class="leancloud_visitors" data-flag-title="MySQL自定义变量小结">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。下面的话大部分是从书上搬下来的。</p>
-<h1 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h1><p>有些场景我们不能使用自定义变量</p>
-<ul>
-<li>使用自定义变量的查询，无法使用查询缓存</li>
-<li>不能在使用常量或者标识符的地方使用自定义变量，例如表名、列名、和LIMIT子句中</li>
-<li>用户自定义变量的生命周期是在一个连接中有效，所以不能用它们来做连接间的通信</li>
-<li>如果使用连接池或者持久话连接，自定义变量可能让看起来毫无关系的代码发生交互（如果是这样，通常是代码bug或者连接池bug，这类情况确实可能发生，前面是书上原话，此处存疑）</li>
-<li>在5.0之前的版本，是大小写敏感的，所以要注意代码在不同MySQL版本间的兼容性问题</li>
-<li>不能显示地声明自定义变量的类型。确定未定义变量的具体类型的时机在不同MySQL版本中也可能不一样。用户自定义变量的类型在赋值的时候会改变，MySQL的用户自定义变量是一个动态类型，最好定义时就赋初值</li>
-<li>MySQL优化器在某些场景下可能会将这些变量优化掉，这可能导致代码不按预想的方式运行</li>
-<li>复制的顺序和赋值的时间点并不总是固定的，这依赖于优化器的决定。实际情况可能很让人困惑</li>
-<li>赋值符号:=的优先级非常低，所以需要注意，赋值表达式应该使用明确的括号</li>
-<li>使用未定义变量不会产生任何语法错误</li>
-</ul>
-<h1 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h1><h2 id="1-优化排名语句"><a href="#1-优化排名语句" class="headerlink" title="1.优化排名语句"></a>1.优化排名语句</h2><p>用户自定义变量可以在给一个变量赋值的同时使用这个变量。用户自定义变量具有“左值”的特性。<br>来简单的实现一个rownumber的功能：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SET @rownum := 0;</div><div class="line">SELECT actor_id, @rownum := @rownum + 1 AS rownum FROM actor;</div></pre></td></tr></table></figure></p>
-<p>书中还给了一个复杂的例子来演示排名的写法，Leetcode的练习题中也有类似例子<a href="https://leetcode.com/problems/rank-scores/description/" target="_blank" rel="external">178. Rank Scores</a></p>
-<h2 id="2-避免重复查询刚刚更新的数据"><a href="#2-避免重复查询刚刚更新的数据" class="headerlink" title="2.避免重复查询刚刚更新的数据"></a>2.避免重复查询刚刚更新的数据</h2><p>例如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">UPDATE t1 SET lastUpdated = NOW() WHERE id = 1;</div><div class="line">SELECT lastUpdated FROM t1 FROM id = 1;</div></pre></td></tr></table></figure></p>
-<p>使用变量，可以改写为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">UPDATE t1 SET lastUpdated = NOW() WHERE id = 1 AND @now := NOW();</div><div class="line">SELECT @now;</div></pre></td></tr></table></figure></p>
-<p>改写后仍需要两个查询，需要两次网络来回，但是无需访问任何数据表</p>
-<h2 id="3-统计更新和插入的数量"><a href="#3-统计更新和插入的数量" class="headerlink" title="3.统计更新和插入的数量"></a>3.统计更新和插入的数量</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">INSERT INTO t1(c1, c2) VALUES(4, 4), (2,1), (3,1) ON DUPLICATE KEY UPDATE c1 = VALUES(c1) + (0 * (@x := @x + 1));</div></pre></td></tr></table></figure>
-<p>这个写法十分巧妙，每次由于冲突导致更新时对变量@x自增一次，然后再乘0来避免影响要更新的内容。同时MySQL的协议会返回被更改的总行数，所以不需要单独统计这个值。</p>
-<h2 id="4-确定取值的顺序"><a href="#4-确定取值的顺序" class="headerlink" title="4.确定取值的顺序"></a>4.确定取值的顺序</h2><p>用户自定义变量的一个最常见问题是没有注意到在赋值和读取变量的时候可能是在查询的不同阶段。<br>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SET @rownum := 0;</div><div class="line">SELECT actor_id, @rownum := @rownum + 1 as cnt</div><div class="line">FROM actor</div><div class="line">WHERE @rownum &lt;= 1</div></pre></td></tr></table></figure></p>
-<p>结果只返回了两条结果，似乎符合预期（实际读取变量和赋值不在同一阶段，但是没有影响到结果）。而<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">SET @rownum := 0;</div><div class="line">SELECT actor_id, @rownum := @rownum + 1 as cnt</div><div class="line">FROM actor</div><div class="line">WHERE @rownum &lt;= 1</div><div class="line">ORDER BY first_name;</div></pre></td></tr></table></figure></p>
-<p>却返回了200条结果，而且有cnt超过1的条目，通过explain语句我们发现<br><br>using filesort是造成这个问题的原因，WHERE条件是在文件排序操作之前取值的（ORDER BY导致一次性选取了所有满足WHERE条件的语句，换句话说，WHERE处的@rownum只读取了一次，值为0，所有数据都符合条件，WHERE执行在SELECT之前，之后不停给@rownum赋新值，我是这样理解的）。如果first_name有索引则结果正常，使用了覆盖索引并且没有触发filesort。</p>
-<h2 id="5-编写偷懒的UNION"><a href="#5-编写偷懒的UNION" class="headerlink" title="5.编写偷懒的UNION"></a>5.编写偷懒的UNION</h2><p>下面的查询会在两个地方查找一个用户——一个用户表，一个长时间不活跃的用户表，不活跃的用户表的目的是为了实现更高效的归档：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SELECT id FROM users WHERE id = 123</div><div class="line">UNION ALL</div><div class="line">SELECT id FROM users_archived WHERE id = 123;</div></pre></td></tr></table></figure></p>
-<p>上面的查询即使在users表中已经找到了记录，也还是会去users_archived中再查找一次。我们可以用UNION查询来抑制，只有当第一个表中没有数据时，才在第二个表中查询。只要在第一个表中找到记录就定义一个变量@found通过在结果列中做一次赋值来实现，然后将赋值放在函数GREATEST中来避免返回额外的数据。为了明确结果来自哪一个表，新增了一个包含表名的列。最后需要在查询的末尾将变量重置为NULL，保证遍历时不干扰后面的结果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SELECT GREATEST(@found := −1, id) AS id, &apos;users&apos; AS which_tbl</div><div class="line">FROM users WHERE id = 1</div><div class="line">UNION ALL</div><div class="line">SELECT id, &apos;users_archived&apos;FROM users_archived WHERE id = 1 AND @found IS NULL</div><div class="line">UNION ALL</div><div class="line">SELECT 1, &apos;reset&apos; FROM DUAL WHERE ( @found := NULL ) IS NOT NULL;</div></pre></td></tr></table></figure></p>
-<h2 id="6-用户自定义变量的其他用处"><a href="#6-用户自定义变量的其他用处" class="headerlink" title="6.用户自定义变量的其他用处"></a>6.用户自定义变量的其他用处</h2><ul>
-<li>查询运行是计算总数和平均值</li>
-<li>模拟GROUP语句中的函数FITST()和LAST()</li>
-<li>对大量数据做一些数据计算</li>
-<li>计算一个大表的MD5散列值</li>
-<li>编写一个样本处理函数，当样本中的数值超过某个边界值的时候将其变成0</li>
-<li>模拟读/写游标</li>
-<li>在SHOW语句的WHERE子句中加入变量值</li>
-</ul>
-<h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7.总结"></a>7.总结</h2><p>先了解SQL语句的执行顺序才能读懂这部分，其他用处我还没有试验。</p>
-<h2 id="8-参考资料"><a href="#8-参考资料" class="headerlink" title="8.参考资料"></a>8.参考资料</h2><p>《高性能MySQL》</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
       
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/10/17/我的校招之路才刚刚开始/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="天明">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="天明的小窝">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/17/我的校招之路才刚刚开始/" itemprop="url">我的校招之路才刚刚开始</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-17T11:07:18+08:00">
-                2017-10-17
-              </time>
+              <a href="/2017/12/05/MySQL自定义变量小结/" rel="next" title="MySQL自定义变量小结">
+                <i class="fa fa-chevron-left"></i> MySQL自定义变量小结
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/10/17/我的校招之路才刚刚开始/" class="leancloud_visitors" data-flag-title="我的校招之路才刚刚开始">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>经历了一些努力，拿到了好几家大公司的面试，已经到了TMD之流，复习的第一阶段目标已经基本达成。不论如何轮到我展现真正实力的时候到了。最近每一天都要面试，来不及写更多，对于面试的复盘我会在接下来进行记录。还要再复习。哈哈哈哈。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -977,577 +701,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/09/24/SQL语句执行顺序/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="天明">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="天明的小窝">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/24/SQL语句执行顺序/" itemprop="url">SQL语句执行顺序</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-24T23:07:11+08:00">
-                2017-09-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/09/24/SQL语句执行顺序/" class="leancloud_visitors" data-flag-title="SQL语句执行顺序">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>SQL语句执行顺序是面试中的基础考点，理解SQL对于优化排错有重大的作用,这里从两篇文章摘取部分重要的内容</p>
-<h1 id="SQL查询步骤"><a href="#SQL查询步骤" class="headerlink" title="SQL查询步骤"></a>SQL查询步骤</h1><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">(8)SELECT (9) DISTINCT (11) &lt;TOP_specification&gt; &lt;select_list&gt;</div><div class="line">(1) FROM &lt;left_table&gt;</div><div class="line">(3) &lt;join_type&gt; JOIN &lt;right_table&gt;</div><div class="line">(2) ON &lt;join_condition&gt;</div><div class="line">(4) WHERE &lt;where_condition&gt;</div><div class="line">(5) GROUP BY &lt;group_by_list&gt;</div><div class="line">(6) WITH &#123;CUBE | ROLLUP&#125;</div><div class="line">(7) HAVING &lt;having_condition&gt;</div><div class="line">(10) ORDER BY &lt;order_by_list&gt;</div></pre></td></tr></table></figure>
-<p>这是对语句执行顺序的基本总结</p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol>
-<li>FROM：对FROM子句中的前两个表执行笛卡尔积(交叉联接)，生成虚拟表VT1。</li>
-<li>ON：对VT1应用ON筛选器，只有那些使为真才被插入到VT2。</li>
-<li>OUTER (JOIN):如果指定了OUTER JOIN(相对于CROSS JOIN或INNER JOIN)，保留表中未找到匹配的行将作为外部行添加到VT2，生成VT3。如果FROM子句包含两个以上的表，则对上一个联接生成的结果表和下一个表重复执行步骤1到步骤3，直到处理完所有的表位置。</li>
-<li>WHERE：对VT3应用WHERE筛选器，只有使为true的行才插入VT4。</li>
-<li>GROUP BY：按GROUP BY子句中的列列表对VT4中的行进行分组，生成VT5。</li>
-<li>CUTE|ROLLUP：把超组插入VT5，生成VT6。</li>
-<li>HAVING：对VT6应用HAVING筛选器，只有使为true的组插入到VT7。</li>
-<li>SELECT：处理SELECT列表，产生VT8。</li>
-<li>DISTINCT：将重复的行从VT8中删除，产品VT9。</li>
-<li>ORDER BY：将VT9中的行按ORDER BY子句中的列列表顺序，生成一个游标(VC10)。</li>
-<li>TOP：从VC10的开始处选择指定数量或比例的行，生成表VT11，并返回给调用者。</li>
-</ol>
-<h1 id="引用文章"><a href="#引用文章" class="headerlink" title="引用文章"></a>引用文章</h1><p><a href="http://www.jianshu.com/p/bb19b6b0fdc3" target="_blank" rel="external">sql语句执行顺序</a><br><a href="http://www.jellythink.com/archives/924" target="_blank" rel="external">SQL逻辑查询语句执行顺序</a></p>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/09/23/索引失效情况总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="天明">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="天明的小窝">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/23/索引失效情况总结/" itemprop="url">索引失效情况总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-23T22:38:01+08:00">
-                2017-09-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/09/23/索引失效情况总结/" class="leancloud_visitors" data-flag-title="索引失效情况总结">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>非常意外的收到了京东的面试，面试小姐姐问到了索引失效的情况，这是个很基础的问题，在这里做一下简单的总结，至于背后的原理会在后面解释。</p>
-<h1 id="索引失效的情况"><a href="#索引失效的情况" class="headerlink" title="索引失效的情况"></a>索引失效的情况</h1><h2 id="1-查询条件包含or"><a href="#1-查询条件包含or" class="headerlink" title="1.查询条件包含or"></a>1.查询条件包含or</h2><p>如果查询条件包含or时，可能导致索引失效。<br>当or左右查询字段只有一个是索引，该索引失效，只有当or左右查询字段均为索引时，才会生效。</p>
-<h2 id="2-like查询以-开头"><a href="#2-like查询以-开头" class="headerlink" title="2.like查询以%开头"></a>2.like查询以%开头</h2><p>使用like模糊查询，当%在前时索引失效。</p>
-<h2 id="3-如果列类型是字符串，where时一定要用引号括起来，否则索引失效"><a href="#3-如果列类型是字符串，where时一定要用引号括起来，否则索引失效" class="headerlink" title="3.如果列类型是字符串，where时一定要用引号括起来，否则索引失效"></a>3.如果列类型是字符串，where时一定要用引号括起来，否则索引失效</h2><h2 id="4-如果mysql估计使用全表扫描比使用索引快，则索引失效"><a href="#4-如果mysql估计使用全表扫描比使用索引快，则索引失效" class="headerlink" title="4.如果mysql估计使用全表扫描比使用索引快，则索引失效"></a>4.如果mysql估计使用全表扫描比使用索引快，则索引失效</h2><h2 id="5-最左前缀匹配原则"><a href="#5-最左前缀匹配原则" class="headerlink" title="5.最左前缀匹配原则"></a>5.最左前缀匹配原则</h2><p>这条是最为复杂的，这里直接引用美团的文章<br>1.最左前缀匹配原则，非常重要的原则，mysql会一直向右匹配直到遇到范围查询(&gt;、&lt;、between、like)就停止匹配，比如a = 1 and b = 2 and c &gt; 3 and d = 4 如果建立(a,b,c,d)顺序的索引，d是用不到索引的，如果建立(a,b,d,c)的索引则都可以用到，a,b,d的顺序可以任意调整。<br>2.=和in可以乱序，比如a = 1 and b = 2 and c = 3 建立(a,b,c)索引可以任意顺序，mysql的查询优化器会帮你优化成索引可以识别的形式。</p>
-<h2 id="6-对索引列进行运算导致索引失效"><a href="#6-对索引列进行运算导致索引失效" class="headerlink" title="6.对索引列进行运算导致索引失效"></a>6.对索引列进行运算导致索引失效</h2><p>对索引列进行运算包括(+，-，*，/，! 等)，如 where id - 1 = 1;</p>
-<h2 id="7-索引不会包含有NULL值的列"><a href="#7-索引不会包含有NULL值的列" class="headerlink" title="7.索引不会包含有NULL值的列"></a>7.索引不会包含有NULL值的列</h2><p>只要列中包含有NULL值都将不会被包含在索引中，复合索引中只要有一列含有NULL值，那么这一列对于此复合索引就是无效的。所以我们在数据库设计时不要让字段的默认值为NULL。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>以上只是可能的集中情况，根据数据库引擎和索引的类别情况可能有所不同。如果对是否使用到索引有疑问，一定要使用explain检查索引是否失效！<br>一定要使用explain检查索引是否失效！<br>一定要使用explain检查索引是否失效！<br>对于如何怎样建立合适的索引我会另做讨论</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/09/15/TCP拥塞控制-经典算法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="天明">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="天明的小窝">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/15/TCP拥塞控制-经典算法/" itemprop="url">TCP拥塞控制-经典算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T08:41:58+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/09/15/TCP拥塞控制-经典算法/" class="leancloud_visitors" data-flag-title="TCP拥塞控制-经典算法">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
-<p>路由器因无法处理高速率到达的流量而被迫丢弃数据信息的现象称为拥塞。当路由器处于上述状态时，我们就说出现了拥塞。即使仅有一条通信连接，也可能造成一个甚至多个路由器阻塞。若不采取对策，网络性能将大受影响以致瘫痪。在最坏情况下，甚至形成拥塞崩溃。为了避免或在一定程度上缓解这种状况，TCP通信的每一方实行拥塞控制机制。不同的TCP版本采取的规程和行为有所差异。</p>
-</blockquote>
-<p>上面是《TCP/IP详解卷1》对于拥塞控制的引言，相比《计算机网络-自顶向下》，《TCP/IP详解卷1》更为详细的讲述了不同种的算法原理。入门可以先从《计算机网络-自顶向下》读起，有个大致了解便可以，如果感兴趣再读《TCP/IP详解卷1》。<br>简单概括，拥塞控制包含3个方面：慢启动、拥塞避免、快速恢复。</p>
-<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>在开始之前有几个概念要了解<br>拥塞窗口（congestion window）：记为cwnd，拥塞控制的关键参数，它描述源端在拥塞控制情况下一次最多能发送的数据包的数量。<br>慢启动阈值（slow start threshold）：记为ssthres，拥塞控制中慢启动阶段和拥塞避免阶段的分界点。</p>
-<h2 id="慢启动"><a href="#慢启动" class="headerlink" title="慢启动"></a>慢启动</h2><p>开始时，cwnd的值一般为1个MSS，发送端按照cwnd大小发送数据，在接收到一个数据段的ACK后，cwnd就增加一个MSS大小。cwnd的值会随着RTT呈指数增长。<br>例如，cwnd初始为1,接收到一个数据段的ACK后，cwnd增长到2,接着会发送两个数据段。如果成功接收到相应的新的ACK，cwnd会由2增长为4,以此类推。<br>结束：慢启动的结束有3种方式。  </p>
-<ol>
-<li>当cwnd的增长到达ssthresh，就进入拥塞避免模式。</li>
-<li>如果收到了了一个丢包提示，就将ssthresh的值设置为cwnd的一半，并将cwnd设置为1,重新进入慢启动过程。</li>
-<li>当收到3个重复的ACK，就执行一次快速重传并且进入快速恢复状态。</li>
-</ol>
-<h2 id="拥塞避免"><a href="#拥塞避免" class="headerlink" title="拥塞避免"></a>拥塞避免</h2><p>进入拥塞避免说明cwnd的值大约是上次遇到拥塞时的一半，这时不能盲目翻倍，而是每经过1个RTT使cwnd增加1个MSS。也就是说当收到一个ACK时，cwnd = cwnd + 1/cwnd，当每过一个RTT时，cwnd = cwnd + 1。<br>结束：拥塞避免的结束有两种可能。  </p>
-<ol>
-<li>当出现超时时，将ssthresh设置为当前cwnd值的一半，cwnd设置为1,重新进入慢启动过程。  </li>
-<li>当收到3个重复的ACK时，把ssthresh设置为cwnd的一半，再把cwnd设置为ssthresh（某些实现为ssthresh + 3），之后进入快速恢复。  </li>
-</ol>
-<h2 id="快速恢复"><a href="#快速恢复" class="headerlink" title="快速恢复"></a>快速恢复</h2><p>快速恢复就是指进入快速恢复前的一系列操作，即sssthresh设置为当前cwnd的一半，并将cwnd设置为ssthresh（某些版本为ssthresh + 3），之后进入拥塞避免状态。  </p>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>《计算机网络-自顶向下》</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="天明">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="天明的小窝">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/14/其实我的校招之路早就结束了/" itemprop="url">其实我的校招之路早就结束了</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T13:49:04+08:00">
-                2017-09-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/09/14/其实我的校招之路早就结束了/" class="leancloud_visitors" data-flag-title="其实我的校招之路早就结束了">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="项目之后"><a href="#项目之后" class="headerlink" title="项目之后"></a>项目之后</h2><p>我只参加过一个项目，在没有任何经验的情况下几乎独立负责微信后台的编写。由于线程不安全出现了读脏数据的问题，这个问题深深困扰着我，虽然有临时的解决办法，但我却不知道问题的根源。这之后我没有再接着参与项目，而是在寻找出问题的原因。查找很多资料没有找到原因，于是我决定从头开始，从出问题的地方，“单例”和项目中其它的问题入手，漫长的学习之路开始了。从《深入理解JVM》、《设计模式》、《Java并发编程的艺术》直到接近半年后才搞清楚了问题的根源。当初的代码有太多不合理的地方了，我当时的水平已经尽力了，但是还不够。现在看来要改起来原先的SSH框架都要改不少。往后便想自己写一个权限管理系统骗Star来社招，光element-admin这个就花了寒假整整的两个月，只写好了一个表格控件，结合Spring Security要改出的动态权限系统更是由于对Spring框架的理解不足，2个月都没有进展。现在暂时搁置。</p>
-<h2 id="微光"><a href="#微光" class="headerlink" title="微光"></a>微光</h2><p>原本为以为校招只有985/211能参加，我能走的路只有毕业三年后的社招，直到知乎关注的一位用户说校招不一定看学历，又看了一下面经，发现问的问题正是我经了项目后在学习的，我的学校里没有人注意，甚至是我怀疑学习方向是否正确的东西。这给了我莫大的鼓励。<br><img src="/2017/09/14/其实我的校招之路早就结束了/1.jpg" alt="1.jpg" title=""></p>
-<h2 id="刷题之路"><a href="#刷题之路" class="headerlink" title="刷题之路"></a>刷题之路</h2><p>直到此时我才发现我的课程里没有算法，DFS、BFS、回溯、动态规划我都不会，实习生的笔试编程题全部都是暴力去想。TCP的状态图根本不会画，没听说过B树，排序算法只会写冒泡，没有看过JDK源码，没有学过编译原理。唯一有的只是零散的知识，但此时正是3月，一切还来的及。我已经知道秋招无望了，我的目的只是想通过一场笔试，拿到面试的机会。刷题之路便开始了，我捡起了大一就注册但没有刷几道题的leetcode。<br><img src="/2017/09/14/其实我的校招之路早就结束了/2.jpg" alt="2.jpg" title=""></p>
-<h2 id="注定"><a href="#注定" class="headerlink" title="注定"></a>注定</h2><p>虽然秋招开始不久，但结果不出所料，笔试的几家应该都没有回应，编程题只能做1道多，虽然选择应该不会太差，但是笔试通过已无望，更何况有一些笔试机会都没有。如果没有当初追寻问题根源的坚持，面试的知识点我根本一点也不会，正是因为如此第一次看《Java编程思想》的一年半后我才终于看懂大部分，《Effective Java》也能看懂大部分，Sprimg MVC的源码也能看懂一部分。这一阶段是我能力增长最快的阶段，即便如此和大佬的差距还是太大。我很感谢牛客网，感谢上面答疑、分享资料的同学，也很感谢给我内推的同学。<br><img src="/2017/09/14/其实我的校招之路早就结束了/3.png" alt="3.png" title=""><br><img src="/2017/09/14/其实我的校招之路早就结束了/4.jpg" alt="4.jpg" title=""></p>
-<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>我能走的只有社招了，好好维护GitHub和博客。虽然很羡慕那些公司的技术氛围，可以有很多机会学习新的技术，不用像我这样搞前后端分离和Restful就要试好几个月，能接触高并发，有导师指导，不会走很多弯路。但实力的差距摆在那里，我不会放下追逐的脚步，3年后我会再来。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -1555,6 +713,12 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMTAyOC83NTc3"></div>
+    
+  </div>
+
 
         </div>
         
@@ -1575,8 +739,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <p class="site-author-name" itemprop="name">天明</p>
@@ -1636,6 +809,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Maven学习笔记"><span class="nav-number">1.</span> <span class="nav-text">Maven学习笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-是什么"><span class="nav-number">1.1.</span> <span class="nav-text">1. 是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-入门"><span class="nav-number">1.2.</span> <span class="nav-text">2. 入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-坐标和依赖"><span class="nav-number">1.3.</span> <span class="nav-text">3. 坐标和依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-入门"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 入门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-详解"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-scope详解"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">3.2.1 scope详解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-传递性依赖"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 传递性依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-1-什么是传递性依赖"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">3.3.1 什么是传递性依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-2-传递性依赖和依赖范围"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">3.3.2 传递性依赖和依赖范围</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-依赖调解"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 依赖调解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-可选依赖"><span class="nav-number">1.3.5.</span> <span class="nav-text">3.5 可选依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-实战"><span class="nav-number">1.3.6.</span> <span class="nav-text">3.6 实战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-6-1-排除依赖"><span class="nav-number">1.3.6.1.</span> <span class="nav-text">3.6.1 排除依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-6-2-归类依赖"><span class="nav-number">1.3.6.2.</span> <span class="nav-text">3.6.2 归类依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-6-3-优化依赖"><span class="nav-number">1.3.6.3.</span> <span class="nav-text">3.6.3 优化依赖</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-仓库"><span class="nav-number">1.4.</span> <span class="nav-text">4. 仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-介绍"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-仓库的布局"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 仓库的布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-仓库分类"><span class="nav-number">1.4.3.</span> <span class="nav-text">4.3 仓库分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-1-本地仓库"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">4.3.1 本地仓库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-2-中央仓库"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">4.3.2 中央仓库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-3-私服"><span class="nav-number">1.4.3.3.</span> <span class="nav-text">4.3.3 私服</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-远程仓库的配置"><span class="nav-number">1.4.4.</span> <span class="nav-text">4.4 远程仓库的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-1-远程仓库的认证"><span class="nav-number">1.4.4.1.</span> <span class="nav-text">4.4.1 远程仓库的认证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-2-部署至远程仓库"><span class="nav-number">1.4.4.2.</span> <span class="nav-text">4.4.2 部署至远程仓库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-快照版本"><span class="nav-number">1.4.5.</span> <span class="nav-text">4.5 快照版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-从仓库解析依赖的机制"><span class="nav-number">1.4.6.</span> <span class="nav-text">4.6 从仓库解析依赖的机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-7-镜像"><span class="nav-number">1.4.7.</span> <span class="nav-text">4.7 镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-8-仓库搜索服务"><span class="nav-number">1.4.8.</span> <span class="nav-text">4.8 仓库搜索服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-生命周期和插件"><span class="nav-number">1.5.</span> <span class="nav-text">5. 生命周期和插件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-生命周期简介"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 生命周期简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-生命周期详解"><span class="nav-number">1.5.2.</span> <span class="nav-text">5.2 生命周期详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-1-三套生命周期"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">5.2.1 三套生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-2-clean生命周期"><span class="nav-number">1.5.2.2.</span> <span class="nav-text">5.2.2 clean生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-3-default生命周期"><span class="nav-number">1.5.2.3.</span> <span class="nav-text">5.2.3 default生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-4-site生命周期"><span class="nav-number">1.5.2.4.</span> <span class="nav-text">5.2.4 site生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-5-命令行与生命周期"><span class="nav-number">1.5.2.5.</span> <span class="nav-text">5.2.5 命令行与生命周期</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-插件目标与绑定"><span class="nav-number">1.5.3.</span> <span class="nav-text">5.3 插件目标与绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-1-自定义绑定"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">5.3.1 自定义绑定</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-插件配置"><span class="nav-number">1.5.4.</span> <span class="nav-text">5.4 插件配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-4-1-命令行插件配置"><span class="nav-number">1.5.4.1.</span> <span class="nav-text">5.4.1 命令行插件配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-4-2-POM中插件全局配置"><span class="nav-number">1.5.4.2.</span> <span class="nav-text">5.4.2 POM中插件全局配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-4-3-POM中插件任务配置"><span class="nav-number">1.5.4.3.</span> <span class="nav-text">5.4.3 POM中插件任务配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-聚合与继承"><span class="nav-number">1.6.</span> <span class="nav-text">6. 聚合与继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-聚合"><span class="nav-number">1.6.1.</span> <span class="nav-text">6.1 聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-继承"><span class="nav-number">1.6.2.</span> <span class="nav-text">6.2 继承</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-1-可继承的POM元素"><span class="nav-number">1.6.2.1.</span> <span class="nav-text">6.2.1 可继承的POM元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-2-依赖管理"><span class="nav-number">1.6.2.2.</span> <span class="nav-text">6.2.2 依赖管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-3-插件管理"><span class="nav-number">1.6.2.3.</span> <span class="nav-text">6.2.3 插件管理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-使用Maven进行测试"><span class="nav-number">1.7.</span> <span class="nav-text">7. 使用Maven进行测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-跳过测试"><span class="nav-number">1.7.1.</span> <span class="nav-text">7.1 跳过测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-1-仅跳过单元测试"><span class="nav-number">1.7.1.1.</span> <span class="nav-text">7.1.1 仅跳过单元测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-2-跳过单元测试编译和测试"><span class="nav-number">1.7.1.2.</span> <span class="nav-text">7.1.2 跳过单元测试编译和测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-灵活构建"><span class="nav-number">1.8.</span> <span class="nav-text">8. 灵活构建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-Maven属性"><span class="nav-number">1.8.1.</span> <span class="nav-text">8.1 Maven属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-构建环境的差异"><span class="nav-number">1.8.2.</span> <span class="nav-text">8.2 构建环境的差异</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-资源过滤"><span class="nav-number">1.8.3.</span> <span class="nav-text">8.3 资源过滤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-4-Maven-Profile"><span class="nav-number">1.8.4.</span> <span class="nav-text">8.4 Maven Profile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#8-4-1-激活profile"><span class="nav-number">1.8.4.1.</span> <span class="nav-text">8.4.1 激活profile</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-4-2-profile的种类"><span class="nav-number">1.8.4.2.</span> <span class="nav-text">8.4.2 profile的种类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.9.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1785,6 +974,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
 
   
 
@@ -1813,6 +1006,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
