@@ -104,7 +104,7 @@
 <meta property="og:description" content="Maven学习笔记1. 是什么基于Java的跨平台项目管理及自动构建工具 2. 入门1234567891011121314&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt; &amp;lt;!--xml版本和编码方式 --&amp;gt;&amp;lt;!--project是pom.xml的根元素--&amp;gt;&amp;lt;project xmlns=&quot;http://maven.apache">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://litianming1024.github.io/2018/08/23/Maven学习笔记/私服的用途.png">
-<meta property="og:updated_time" content="2018-08-22T17:41:51.874Z">
+<meta property="og:updated_time" content="2018-09-04T15:33:43.297Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Maven学习笔记">
 <meta name="twitter:description" content="Maven学习笔记1. 是什么基于Java的跨平台项目管理及自动构建工具 2. 入门1234567891011121314&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt; &amp;lt;!--xml版本和编码方式 --&amp;gt;&amp;lt;!--project是pom.xml的根元素--&amp;gt;&amp;lt;project xmlns=&quot;http://maven.apache">
@@ -452,7 +452,7 @@
 <table>
 <thead>
 <tr>
-<th>节省外网贷款</th>
+<th>节省外网带宽</th>
 <th>消除对外重复构件的下载</th>
 </tr>
 </thead>
@@ -633,7 +633,7 @@
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">settings</span>&gt;</span></div><div class="line">     ...</div><div class="line">     <span class="tag">&lt;<span class="name">activeProfiles</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">activeProfile</span>&gt;</span>dev-x<span class="tag">&lt;/<span class="name">activeProfile</span>&gt;</span></div><div class="line">     <span class="tag">&lt;/<span class="name">activeProfiles</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">settings</span>&gt;</span></div></pre></td></tr></table></figure>
 </li>
 <li><p>系统属性激活<br>用户可以配置当某系统属性存在或者为特定值的时候自动激活profile，如test为x</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>test<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>x<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div><div class="line">``` </div><div class="line">不要忘了用户可以在命令行生命系统属性  </div><div class="line">`mvn clean install -Dtest=x`   </div><div class="line">4. 操作系统环境激活  </div><div class="line">5. 文件存在与否激活  </div><div class="line">6. 默认激活  </div><div class="line">定义profile的时候指定其默认激活</div><div class="line">```xml</div><div class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>dev<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">activeByDefault</span>&gt;</span>true<span class="tag">&lt;/<span class="name">activeByDefault</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">        ...</div><div class="line">    <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>test<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>x<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div><div class="line">``` </div><div class="line"></div><div class="line">不要忘了用户可以在命令行声明系统属性  </div><div class="line">`mvn clean install -Dtest=x`</div><div class="line">   </div><div class="line">4. 操作系统环境激活  </div><div class="line">5. 文件存在与否激活  </div><div class="line">6. 默认激活  </div><div class="line">定义profile的时候指定其默认激活</div><div class="line"></div><div class="line">```xml</div><div class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>dev<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">activeByDefault</span>&gt;</span>true<span class="tag">&lt;/<span class="name">activeByDefault</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">        ...</div><div class="line">    <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div></pre></td></tr></table></figure>
 </li>
 </ol>
 <p><strong>如果POM中有任何一个profile通过以上其他任意一种方式被激活，所有的默认激活配置都会失效</strong><br>了解当前激活的profile:<code>mvn help:active-profiles</code><br>列出当前所有的profile:<code>mvn help:all-profiles</code></p>
@@ -686,6 +686,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/02/缓存使用系列/" rel="prev" title="缓存使用系列">
+                缓存使用系列 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -763,7 +767,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -776,7 +780,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

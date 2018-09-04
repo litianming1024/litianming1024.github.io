@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="缓存穿透,缓存雪崩,缓存击穿," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="实际工作中经常用到Redis作为缓存，只要用到缓存，就会碰到缓存穿透、缓存雪崩和缓存击穿。在看了很多博文之后记录一下关于缓存的问题，每个博文有各自的观点，这里做一下总结和个人的理解。   1. 缓存穿透在大多数互联网应中，缓存是不可或缺的组件，缓存的使用方式如下：  当业务系统发起某一个查询请求时，首先判断缓存中是否有该数据；1.1 如果缓存中存在，则直接返回数据 缓存层不命中，查询数据库 然后返">
+<meta name="keywords" content="缓存穿透,缓存雪崩,缓存击穿">
+<meta property="og:type" content="article">
+<meta property="og:title" content="缓存使用系列">
+<meta property="og:url" content="http://litianming1024.github.io/2018/09/02/缓存使用系列/index.html">
+<meta property="og:site_name" content="天明的小窝">
+<meta property="og:description" content="实际工作中经常用到Redis作为缓存，只要用到缓存，就会碰到缓存穿透、缓存雪崩和缓存击穿。在看了很多博文之后记录一下关于缓存的问题，每个博文有各自的观点，这里做一下总结和个人的理解。   1. 缓存穿透在大多数互联网应中，缓存是不可或缺的组件，缓存的使用方式如下：  当业务系统发起某一个查询请求时，首先判断缓存中是否有该数据；1.1 如果缓存中存在，则直接返回数据 缓存层不命中，查询数据库 然后返">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://litianming1024.github.io/2018/09/02/缓存使用系列/缓存穿透.png">
+<meta property="og:image" content="http://litianming1024.github.io/2018/09/02/缓存使用系列/布隆过滤器.png">
+<meta property="og:image" content="http://litianming1024.github.io/2018/09/02/缓存使用系列/缓存击穿.png">
+<meta property="og:updated_time" content="2018-09-04T16:37:30.600Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="缓存使用系列">
+<meta name="twitter:description" content="实际工作中经常用到Redis作为缓存，只要用到缓存，就会碰到缓存穿透、缓存雪崩和缓存击穿。在看了很多博文之后记录一下关于缓存的问题，每个博文有各自的观点，这里做一下总结和个人的理解。   1. 缓存穿透在大多数互联网应中，缓存是不可或缺的组件，缓存的使用方式如下：  当业务系统发起某一个查询请求时，首先判断缓存中是否有该数据；1.1 如果缓存中存在，则直接返回数据 缓存层不命中，查询数据库 然后返">
+<meta name="twitter:image" content="http://litianming1024.github.io/2018/09/02/缓存使用系列/缓存穿透.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://litianming1024.github.io/2018/09/02/缓存使用系列/"/>
+
+
+
+
+
+  <title>缓存使用系列 | 天明的小窝</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '106956825-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">天明的小窝</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2018/09/02/缓存使用系列/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天明">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="天明的小窝">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">缓存使用系列</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-02T10:23:25+08:00">
+                2018-09-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/09/02/缓存使用系列/" class="leancloud_visitors" data-flag-title="缓存使用系列">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>实际工作中经常用到Redis作为缓存，只要用到缓存，就会碰到缓存穿透、缓存雪崩和缓存击穿。在看了很多博文之后记录一下关于缓存的问题，每个博文有各自的观点，这里做一下总结和个人的理解。  </p>
+<h2 id="1-缓存穿透"><a href="#1-缓存穿透" class="headerlink" title="1. 缓存穿透"></a>1. 缓存穿透</h2><p>在大多数互联网应中，缓存是不可或缺的组件，缓存的使用方式如下：</p>
+<ol>
+<li>当业务系统发起某一个查询请求时，首先判断缓存中是否有该数据；<br>1.1 如果缓存中存在，则直接返回数据</li>
+<li>缓存层不命中，查询数据库</li>
+<li>然后返回数据，若无返回空结果，有则将结果写入缓存层同时返回结果（存储层和缓存层应有同步措施，保证缓存了最新的数据）<img src="/2018/09/02/缓存使用系列/缓存穿透.png" alt="缓存穿透.png" title="">
+</li>
+</ol>
+<h3 id="1-1-什么是缓存穿透"><a href="#1-1-什么是缓存穿透" class="headerlink" title="1.1 什么是缓存穿透"></a>1.1 什么是缓存穿透</h3><p>在实际的项目中，我们查询数据通常先从缓存中读取，如果缓存存在直接返回。不存在就查询数据库，然后返回结果。如果查询的数据一直不存在，就会一直查询DB，这样缓存就没有作用，当流量很大的时候，DB有可能挂掉。<br>简单而言就是：请求了大量根本不存在的数据，导致所有的请求直接请求到后端DB上，造成DB异常。  </p>
+<h3 id="1-2-为什么会发生缓存穿透"><a href="#1-2-为什么会发生缓存穿透" class="headerlink" title="1.2 为什么会发生缓存穿透"></a>1.2 为什么会发生缓存穿透</h3><p>发生缓存穿透的原因很多，一般为两种：</p>
+<ol>
+<li>恶意攻击和爬虫造成大量空命中</li>
+<li>业务自身代码或者数据出现问题</li>
+</ol>
+<h3 id="1-3-如何发现"><a href="#1-3-如何发现" class="headerlink" title="1.3 如何发现"></a>1.3 如何发现</h3><p>通常使用日志、打点等，记录调用总量、缓存命中数、存储命中数，如果短时间内空命中非常多，可能存在缓存穿透。</p>
+<h3 id="1-4-缓存穿透解决方法"><a href="#1-4-缓存穿透解决方法" class="headerlink" title="1.4 缓存穿透解决方法"></a>1.4 缓存穿透解决方法</h3><h4 id="1-4-1-缓存空对象"><a href="#1-4-1-缓存空对象" class="headerlink" title="1.4.1 缓存空对象"></a>1.4.1 缓存空对象</h4><p>在第3步中储存层不命中后，将空对象保存到缓存层中（使用特定key来表示），之后的访问将从缓存层中去查询获取到，从而保护了存储层。<br>这么做也会带来两个问题：</p>
+<ol>
+<li>对空值缓存意味着需要额外的空间来存放键值，如果是恶意攻击会导致严重的内存占用。有效的措施是对这类数据设置一个较短的过期时间，让其自动剔除（redis对于过期的key采用定时加惰性删除的机制，定时删除不保证一定会清除过期key，除非主动访问）。</li>
+<li>缓存层和存储层如果没有同步措施会存在一段时间的窗口不一致，如果设置了过期时间为5分钟，这时存储层添加或者修改了这个数据，此时缓存层和数据层消息就不一致了。我们可以利用消息系统或者其他方式清除掉缓存层中的空对象。</li>
+</ol>
+<h4 id="1-4-2-布隆过滤器拦截"><a href="#1-4-2-布隆过滤器拦截" class="headerlink" title="1.4.2 布隆过滤器拦截"></a>1.4.2 布隆过滤器拦截</h4><p>一种可行的方案是使用布隆过滤器，将所有存在的key使用布隆过滤器提前保存起来。业务系统首先去查询布隆过滤器中是否存在该key，如果不存在直接返回，因为数据库中也不存在该数据，缓存中也不会存在。<br><img src="/2018/09/02/缓存使用系列/布隆过滤器.png" alt="布隆过滤器.png" title=""></p>
+<p>其中5.向bitmap添加数据和缓存非空数据取决于业务的需求，我们一般会定时或者批量更新，而不是每次都触发更新。使用布隆过滤器并不适合强时效和高一致性的场景，布隆过滤器无法处理删除数据，重新生成bitmap将耗费一定时间，而且使用前要预热bitmap。</p>
+<h4 id="1-4-3-两种方式的对比"><a href="#1-4-3-两种方式的对比" class="headerlink" title="1.4.3 两种方式的对比"></a>1.4.3 两种方式的对比</h4><table>
+<thead>
+<tr>
+<th>解决方式</th>
+<th>适用场景</th>
+<th>维护成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>缓存空对象</td>
+<td>1.数据命中不高<br>  2.数据频繁变化实时性高</td>
+<td>1.代码维护简单<br>  2.需要过多的缓存空间<br>  3.可能存在数据不一致</td>
+</tr>
+<tr>
+<td>布隆过滤器</td>
+<td>1.数据命中不高<br>  2.数据相对固定实时性低</td>
+<td>1.代码维护复杂<br> 2.缓存占用空间少</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-缓存雪崩"><a href="#2-缓存雪崩" class="headerlink" title="2. 缓存雪崩"></a>2. 缓存雪崩</h2><h3 id="2-1-什么是缓存雪崩"><a href="#2-1-什么是缓存雪崩" class="headerlink" title="2.1 什么是缓存雪崩"></a>2.1 什么是缓存雪崩</h3><p>在实际应用中，通过合理的设置缓存，大部分请求都通过缓存层返回，有效的保护了存储层，但是由于缓存层出现问题（比如宕机或者缓存超时集体失效），所有或者超出存储层极限的调用都会直接到达存储层，从而导致存储层也挂掉。</p>
+<h3 id="2-2-如何预防缓存雪崩"><a href="#2-2-如何预防缓存雪崩" class="headerlink" title="2.2 如何预防缓存雪崩"></a>2.2 如何预防缓存雪崩</h3><h4 id="2-2-1-保证缓存层服务高可用"><a href="#2-2-1-保证缓存层服务高可用" class="headerlink" title="2.2.1 保证缓存层服务高可用"></a>2.2.1 保证缓存层服务高可用</h4><p>面对这种情况我们一般引入集群，通过负载均衡算法分解请求，Redis Sentinel和Redis Cluster暂时还没有用过，TODO:负载均衡算法和Redis集群部分改日填坑。</p>
+<h4 id="2-2-2-依赖隔离组件为后端限流并降级"><a href="#2-2-2-依赖隔离组件为后端限流并降级" class="headerlink" title="2.2.2 依赖隔离组件为后端限流并降级"></a>2.2.2 依赖隔离组件为后端限流并降级</h4><p>基础组件不是永远可靠的，在实际过程中经常碰到基础服务出现问题，小则过载，大则宕机，一些过载恢复机制会随机将请求发送到过载节点，通过返回结果来判断过载服务是否恢复，至于是谁来做重试要看业务的需求。<br>降级在高并发系统中是常见的：比如个性推荐服务中，如果个性化需求不能提供服务了，可以降级补充热点数据，不至于造成前端页面空白。<br>至于hystrix我目前并没有用过，现在组件都是微服务了，基础服务和业务都有自己线程池管理方式，改日再看情况填坑。</p>
+<h2 id="3-缓存击穿（热点key失效）"><a href="#3-缓存击穿（热点key失效）" class="headerlink" title="3. 缓存击穿（热点key失效）"></a>3. 缓存击穿（热点key失效）</h2><p>这里我看了几篇博文，发现缓存击穿和热点key失效说的是一回事。缓存雪崩和缓存击穿的区别是，缓存雪崩针对的是大量key，击穿针对很少的几热点个key产生大量请求，可以看作是雪崩中的的特例，但请求量会非常大。</p>
+<h3 id="3-1-缓存击穿的危害"><a href="#3-1-缓存击穿的危害" class="headerlink" title="3.1 缓存击穿的危害"></a>3.1 缓存击穿的危害</h3><p>当以下两个问题同时出现，可能会对系统造成致命的危害：</p>
+<ol>
+<li>这个key是热点key（例如重要的新闻等），短时间内的访问量可能非常大。</li>
+<li>缓存的构建需要一定时间，比如要经过复杂运算、多次IO、数据库访问、依赖其它接口等等（比如游戏的赛季排行榜）。</li>
+</ol>
+<p>于是就会碰到致命问题，缓存失效的瞬间有大量的线程来构建缓存（如下图，直接盗图），造成后端负载加大，甚至系统崩溃。<br><img src="/2018/09/02/缓存使用系列/缓存击穿.png" alt="缓存击穿.png" title=""></p>
+<h3 id="3-2-缓存击穿的解决方案"><a href="#3-2-缓存击穿的解决方案" class="headerlink" title="3.2 缓存击穿的解决方案"></a>3.2 缓存击穿的解决方案</h3><p>我们尽量使用较少的线程来构建缓存（甚至是一个）</p>
+<h4 id="3-2-1-使用互斥锁"><a href="#3-2-1-使用互斥锁" class="headerlink" title="3.2.1 使用互斥锁"></a>3.2.1 使用互斥锁</h4><p>互斥锁的解决思路比较简单，就是同一时间只让一个线程来构建线程，其他线程等待缓存构建完，再从缓存中获取数据就可以。</p>
+<p>互斥锁分单机和分布式环境。单机环境使用编程语言提供的锁来处理便可，分布式环境使用分布式锁就可以，Redis和zookeeper都可以实现分布式锁，如何实现改日再填坑（TODO：分布式锁）<br>原文都给了互斥锁的实现，但是这个锁是有问题的，而且是有发生死锁的可能性，想一想为什么？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function">String <span class="title">get</span><span class="params">(String key)</span> </span>&#123;</div><div class="line">   String value = redis.get(key);</div><div class="line">   <span class="keyword">if</span> (value  == <span class="keyword">null</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (redis.setnx(key_mutex, <span class="string">"1"</span>)) &#123;</div><div class="line">        <span class="comment">// 设定一个时间，防止db.get()方法产生死锁，要保证这个时间大于db.get()的执行时间</span></div><div class="line">        redis.expire(key_mutex, <span class="number">3</span> * <span class="number">60</span>)</div><div class="line">        value = db.get(key);</div><div class="line">        redis.set(key, value);</div><div class="line">        redis.delete(key_mutex);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">//其他线程休息50毫秒后重试</span></div><div class="line">        Thread.sleep(<span class="number">50</span>);</div><div class="line">        get(key);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>原因：<strong>Redis事务和传统数据库事务定义不同</strong>，setnx和expire这两个操作并不能保证原子性，如果setnx成功之后代码没有执行就会一直锁住，原博主没有详细解释产生死锁的原因。</p>
+<h4 id="3-2-2-永不过期"><a href="#3-2-2-永不过期" class="headerlink" title="3.2.2 永不过期"></a>3.2.2 永不过期</h4><ol>
+<li>Reis上不再设计过期时间，保证“物理”不过期</li>
+<li>过期时间放在key对应的value里，如果过期了，先返回旧值，后台通过异步线程构建缓存，然后更新，也就是“逻辑”上过期（Java的CopyOnWrite非常与之类似，TODO：CopyOnWrite容器源码分析）</li>
+</ol>
+<p>这种方式对于性能非常友好，几乎不会造成请求的阻塞，但是不适用强一致性的数据读取，因为其余线程可能读到的是老的数据。</p>
+<h4 id="3-2-3-两种方式的对比"><a href="#3-2-3-两种方式的对比" class="headerlink" title="3.2.3 两种方式的对比"></a>3.2.3 两种方式的对比</h4><table>
+<thead>
+<tr>
+<th>解决方案</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互斥锁</td>
+<td>1.思路简单<br>  2.保证强一致性</td>
+<td>1.代码复杂度增大<br>  2.存在死锁的风险<br>  3.存在线程池阻塞的风险</td>
+</tr>
+<tr>
+<td>永不过期</td>
+<td>1.异步构建，不会阻塞线程池<br></td>
+<td>1.不保证一致性<br> 2.代码复杂度增大(每个value都要维护一个timekey)<br> 3.占用一定的内存空间(每个value都要维护一个timekey)。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://mp.weixin.qq.com/s/TBCEwLVAXdsTszRVpXhVug" target="_blank" rel="external">Redis架构之防雪崩设计：网站不宕机背后的兵法</a></li>
+<li><a href="http://blog.didispace.com/chengchao-huancun-zuijiazhaoshi" target="_blank" rel="external">缓存穿透、缓存并发、热点缓存之最佳招式</a></li>
+<li>《Redis开发与运维》</li>
+<li><a href="http://carlosfu.iteye.com/blog/2248185" target="_blank" rel="external">缓存系列文章–5.缓存穿透问题</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/缓存穿透/" rel="tag"># 缓存穿透</a>
+          
+            <a href="/tags/缓存雪崩/" rel="tag"># 缓存雪崩</a>
+          
+            <a href="/tags/缓存击穿/" rel="tag"># 缓存击穿</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/23/Maven学习笔记/" rel="next" title="Maven学习笔记">
+                <i class="fa fa-chevron-left"></i> Maven学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMTAyOC83NTc3"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name">天明</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/litianming1024" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-缓存穿透"><span class="nav-number">1.</span> <span class="nav-text">1. 缓存穿透</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-什么是缓存穿透"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 什么是缓存穿透</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-为什么会发生缓存穿透"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 为什么会发生缓存穿透</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-如何发现"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 如何发现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-缓存穿透解决方法"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 缓存穿透解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-1-缓存空对象"><span class="nav-number">1.4.1.</span> <span class="nav-text">1.4.1 缓存空对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-2-布隆过滤器拦截"><span class="nav-number">1.4.2.</span> <span class="nav-text">1.4.2 布隆过滤器拦截</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-3-两种方式的对比"><span class="nav-number">1.4.3.</span> <span class="nav-text">1.4.3 两种方式的对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-缓存雪崩"><span class="nav-number">2.</span> <span class="nav-text">2. 缓存雪崩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-什么是缓存雪崩"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 什么是缓存雪崩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-如何预防缓存雪崩"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 如何预防缓存雪崩</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-保证缓存层服务高可用"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 保证缓存层服务高可用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-依赖隔离组件为后端限流并降级"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 依赖隔离组件为后端限流并降级</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-缓存击穿（热点key失效）"><span class="nav-number">3.</span> <span class="nav-text">3. 缓存击穿（热点key失效）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-缓存击穿的危害"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 缓存击穿的危害</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-缓存击穿的解决方案"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 缓存击穿的解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-使用互斥锁"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 使用互斥锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-永不过期"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 永不过期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-两种方式的对比"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.2.3 两种方式的对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 &mdash; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">天明</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+<script>
+  	var _mtac = {};
+  	(function() {
+  		var mta = document.createElement("script");
+  		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.4";
+  		mta.setAttribute("name", "MTAH5");
+  		mta.setAttribute("sid", "500527581");
+
+  		var s = document.getElementsByTagName("script")[0];
+  		s.parentNode.insertBefore(mta, s);
+  	})();
+</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=63752005";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("jiHfwcJtEphKAriEGeMG8IYq-gzGzoHsz", "XPJ6sD8gmhxHgptIOe9rtgCK");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
