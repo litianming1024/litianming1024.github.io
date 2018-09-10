@@ -264,6 +264,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2018/09/11/Web前端性能优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天明">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="天明的小窝">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/11/Web前端性能优化/" itemprop="url">Web前端性能优化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-11T02:22:27+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/09/11/Web前端性能优化/" class="leancloud_visitors" data-flag-title="Web前端性能优化">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为后端，也要经常和前端对需求，前端的优化也要了解，同时对于HTTP协议也要有一定的认识（TODO：HTTP协议）。</p>
+<h2 id="1-浏览器访问优化"><a href="#1-浏览器访问优化" class="headerlink" title="1. 浏览器访问优化"></a>1. 浏览器访问优化</h2><h3 id="1-1-减少http请求"><a href="#1-1-减少http请求" class="headerlink" title="1.1 减少http请求"></a>1.1 减少http请求</h3><p>HTTP协议是<strong>基于TCP的无状态应用层协议</strong>，每次HTTP请求都要建立通信链路进行数据传输，服务器端则要启动独立的线程来处理（实际上Servlet容器都是使用线程池复用连接；高并发情况下我们也会使用各种手段过滤重复的请求，比如前端按钮点击失效一段时间）。<br>为了减少请求HTTP使用了很多手段（TODO：HTTP1.0、1.1、2区别）：</p>
+<ul>
+<li>HTTP1.1使用了长连接，传输完成后一段时间保持连接不关闭（前端和后端都要配置）</li>
+<li>HTTP2可以使用服务器推送<br>目前使用的减少HTTP的主要方式是合并资源文件为一个文件，如CSS、JS、图片等，前端一般会使用Webpack，实际过程很复杂，感觉类似MAVEN。图片可以多张合并，通过CSS偏移响应鼠标点击操作，构造成不同的URL（这个操作好灵性，好像在京东还是什么网站见到过使用）。</li>
+</ul>
+<h3 id="1-2-使用浏览器缓存"><a href="#1-2-使用浏览器缓存" class="headerlink" title="1.2 使用浏览器缓存"></a>1.2 使用浏览器缓存</h3><p>对于网站而已，CSS、JavaScript、logo图片等静态资源更新的频率都很低，但是每次HTTP请求都要重新请求这些资源，无疑要浪费大量的宽带。可以通过HTTP缓存机制，设定HTTP头中Cache-Control和Expires的属性(TODO:HTTP缓存机制)。<br>如果碰到静态资源文件变化需要及时应用到客户端浏览器，可以通过改变文件名，生成一个新的JS文件并更新HTML文件中的引用。<br>使用浏览器缓存策略更新静态资源时，应采用批量更新的方法（？按照后文推断，应该是避免批量更新），比如需要更新10个图标文件，不宜把10个文件一次全部更新，而是应一个文件一个文件逐步更新，并有一定的间隔时间，以免用户浏览器突然大量缓存失效，集中更新缓存，造成服务器负载骤增、网络堵塞的情况。就是避免缓存雪崩情况出现，包括App的更新推送等实际过程中都是分批推送更新通知的，集中一起更新会打满CDN（这里以前出过比较大的问题）。</p>
+<h3 id="1-3-启用压缩"><a href="#1-3-启用压缩" class="headerlink" title="1.3 启用压缩"></a>1.3 启用压缩</h3><p>采用压缩是一种CPU换时间的做法，压缩和解压本身也要消耗一定的时间，要权衡考虑，一般对文本采用压缩，如HTML、CSS、JS文件，压缩过后同时还有利于网络传输。JS代码本身是可以压缩的，这一部分一般通过WebPack管理。使用时要设置HTTP头的Content-Encoding字段。</p>
+<h3 id="1-4-CSS放在页面最上面、JavaScript放在页面最下面（先渲染，后加载逻辑）"><a href="#1-4-CSS放在页面最上面、JavaScript放在页面最下面（先渲染，后加载逻辑）" class="headerlink" title="1.4 CSS放在页面最上面、JavaScript放在页面最下面（先渲染，后加载逻辑）"></a>1.4 CSS放在页面最上面、JavaScript放在页面最下面（先渲染，后加载逻辑）</h3><p>浏览器会在下载完全部CSS之后才对整个页面进行渲染，因此最好的做法是将CSS放在页面最上面，让浏览器尽快下载CSS。JavaScript则相反，浏览器在加载JavaScript后立即执行，有可能会阻塞整个页面，造成页面显示缓慢，因此JavaScript最好放在页面最下面。但如果页面解析时就需要用到JavaScript，这时放在底部就不合适了。同时要注意，如果JS还没加载完用户就先操作了，这时可能时无效的。这类做法与抢红包中的抢拆分离类似，目的时造成加载完成的错觉，避免用户的焦急，动画等特效至少可以为后端和链路上的消耗争取几百毫秒时间。</p>
+<h3 id="1-5-减少Cookie传输"><a href="#1-5-减少Cookie传输" class="headerlink" title="1.5 减少Cookie传输"></a>1.5 减少Cookie传输</h3><p>每次请求与回应都会完全传输整个Cookie，Cookie太大会影响传输效率，写入Cookie的数据要慎重考虑，也可以把部分数据存储在后端的Session中，这时后端要维护这个Session。对于静态资源的请求使用同一域名也会发送Cookie，静态资源可以使用独立域名，避免发送Cookie。</p>
+<h2 id="2-CDN加速"><a href="#2-CDN加速" class="headerlink" title="2. CDN加速"></a>2. CDN加速</h2><p>CDN（Content Distribute Network，内容分发网络）的本质仍然是一个缓存，而且将数据缓存在离用户最近的地方，CDN一般缓存更新频率不高的静态资源，CDN工作流程各个代理商解释的都很详细，推荐阅读<a href="https://cloud.tencent.com/document/product/228/2939" target="_blank" rel="external">腾讯CDN产品概述</a>和<a href="https://www.alibabacloud.com/help/zh/doc-detail/27101.htm" target="_blank" rel="external">什么是阿里云CDN</a>。在CDN过程中DNS起着很大的作用，DNS有着负载均衡的作用，怪不得面试总要考HTTP请求流程，往详细说很复杂（TODO：如何选出最近的服务器，设计接入系统）。</p>
+<h2 id="3-反向代理"><a href="#3-反向代理" class="headerlink" title="3. 反向代理"></a>3. 反向代理</h2><p>CDN位于用户接入点附近，而反向代理则位于网站机房的最外侧，代理接收到的HTTP请求，同时也可以实现负载均衡的作用，根据负载均衡算法分发请求。<br>反向代理的优点：</p>
+<ul>
+<li>实现负载均衡：构建应用集群，提高系统总体处理能力</li>
+<li>安全：来自互联网的请求必须经过代理服务器，在Web服务器和可能的网络攻击之间建立屏障</li>
+<li>加速Web请求：静态内容缓存在反向代理服务器，减轻Web服务器负载压力。静态内容和动态内容都可以，动态内容要通过通知机制更新<br>反向代理的缺点：</li>
+<li>处于OSI参考模型的应用层，每一种协议都需要单独开发反向代理服务器，限制了使用的范围。目前一般用于Web服务器</li>
+<li>每次代理，代理服务器就必须打开两个连接，分别针对对内、对外，并发量大时代理服务器可能成为性能瓶颈。</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>《大型网站技术架构:核心原理与案例分析》</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2018/09/02/缓存使用系列/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1809,7 +1959,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1822,7 +1972,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
