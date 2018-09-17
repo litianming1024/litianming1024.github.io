@@ -264,6 +264,173 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2018/09/18/应用服务器性能优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天明">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="天明的小窝">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/18/应用服务器性能优化/" itemprop="url">应用服务器性能优化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-18T00:44:48+08:00">
+                2018-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/09/18/应用服务器性能优化/" class="leancloud_visitors" data-flag-title="应用服务器性能优化">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>网站的业务逻辑都部署在应用服务器上，是主要优化的地方，优化的常见方式是缓存、集群、异步等。</p>
+<h2 id="1-分布式缓存"><a href="#1-分布式缓存" class="headerlink" title="1.分布式缓存"></a>1.分布式缓存</h2><p>缓存的使用无处不在，ORM框架中的多级缓存，MVC框架中的模板缓存，浏览器缓存，几乎任何框架都提供了缓存功能。</p>
+<blockquote>
+<p>网站性能优化第一定律：优先考虑使用缓存优化性能</p>
+</blockquote>
+<h3 id="1-1-缓存的基本原理"><a href="#1-1-缓存的基本原理" class="headerlink" title="1.1 缓存的基本原理"></a>1.1 缓存的基本原理</h3><p>简单而言都是KV，即Key-Value形式，在这之上有Key-Key-Value形式（Redis的Sorted Set，TODO：Reids数据结构实现原理），用的最多还是KV。KV中的Value可以是任意类型，也可以存放系列化后的二进制数据。</p>
+<p>Java中的hashCode方法可以得到hashcode，这里要说的知识点很多，equals和hashCode任一方法重写都需要重写，准确的说是必须，不然会影响集合类的使用。null对象也是有哈希值的，是0！只有HashTable直接使用hashCode的值，其余都会再扰动计算。只有HashMap允许key或者value为空情况出现，ConcurrentHashMap和淘汰的HashTable都不允许，因为多线程环境无法区分key是put时为null还是key不存在，而且null作为key很容易受到攻击。SynchronizedMap因为可以包装HashMap而可以支持，但是原理和HashTable一样，锁粒度太大导致性能都很差。（TODO：Java并发集合）</p>
+<h3 id="1-2-合理使用缓存"><a href="#1-2-合理使用缓存" class="headerlink" title="1.2 合理使用缓存"></a>1.2 合理使用缓存</h3><ul>
+<li>频繁修改的数据不适用缓存：读写比小于2：1</li>
+<li>热点访问数据适合缓存：尽量保证缓存高频访问的数据</li>
+<li>数据不一致与脏读：设置合理的缓存更新策略，一般为缓存设置失效时间</li>
+<li>缓存可用性：保证缓存服务的稳定，通过分布式集群等</li>
+<li>缓存预热：针对热点数据缓存，比如利用LRU算法等需要较长时间，可以提前人工加载热点数据</li>
+<li>缓存穿透、缓存雪崩、缓存击穿：使用缓存的经典问题，见<a href="https://litianming1024.github.io/2018/09/02/缓存使用系列">缓存使用</a></li>
+</ul>
+<h3 id="1-3-分布式缓存"><a href="#1-3-分布式缓存" class="headerlink" title="1.3 分布式缓存"></a>1.3 分布式缓存</h3><p>分布式缓存指缓存部署在多个服务器组成的集群中，以集群方式提供缓存服务，其架构方式有两种。一种是以JBoss Cache为代表的需要更新同步的分布式缓存，一种是以Memcached为代表的不互相通信的分布式缓存（TODO：Memcached以后填坑）。</p>
+<h2 id="2-异步操作"><a href="#2-异步操作" class="headerlink" title="2. 异步操作"></a>2. 异步操作</h2><p>很多情况下使用异步操作可以改善网站性能，使用消息队列的常见作用就是削峰填谷，将部分操作异步避免前面业务的等待，同时要注意不要把所有后续业务的处理都放在单一的业务逻辑中。如注册后的发邮件就可以放入消息队列，后续处理交由邮件发送消费者。使用消息队列要注意重放攻击，对于哪些操作能放入消息队列，生产者处理失败如何处理要有规定。</p>
+<blockquote>
+<p>任何可以晚点做的事情都应该晚点再做</p>
+</blockquote>
+<h2 id="3-使用集群"><a href="#3-使用集群" class="headerlink" title="3. 使用集群"></a>3. 使用集群</h2><p>在高并发场景下使用负载均衡技术，通过多台服务器为应用构建集群是最简单的方式。请求太多怎么办，上机器！单一的机器受各种限制，配合微服务使用应用集群能够有效处理并发。</p>
+<h2 id="4-代码优化"><a href="#4-代码优化" class="headerlink" title="4. 代码优化"></a>4. 代码优化</h2><p>代码写的烂再多的机器都不一定能救。不同代码的优化方式有别，诸如Java从Web容器，ORM框架选择，JDK本身的优化，JVM调优等。</p>
+<h3 id="4-1-多线程"><a href="#4-1-多线程" class="headerlink" title="4.1 多线程"></a>4.1 多线程</h3><p>多线程是基本的措施，但要考虑<strong>线程安全</strong>问题。使用多线程的原因主要是<strong>IO阻塞</strong>与<strong>多CPU</strong>，当线程进行IO处理时会被阻塞，这时CPU会被释放可以调度其它线程。</p>
+<p>网站的应用程序都是被Web服务器容器管理，不论时Web服务器容器管理的线程还是应用程序自己创建的线程，都不易过多，线程切换虽然比进程切换快，但是过多的线程会带来调度问题。通常启动的线程数：</p>
+<p>启动线程数＝［任务执行时间/（任务执行时间（IO等待时间）］］* CPU内核数</p>
+<p>最佳启动线程数和CPU内核数量成正比，和IO阻塞时间成反比。</p>
+<p>多线程带来线程安全问题，常见的解决手段有，我会单独写一片effective java读后感（TODO：线程安全）：</p>
+<ul>
+<li>对象设计为无状态：无状态对象肯定时线程安全的</li>
+<li>使用局部对象：被多线程访问的对象会出现可见性问题，因为工作内存中的对象是共享内存的拷贝</li>
+<li>并发访问资源使用锁：强一致性要加锁，并合理降低锁的粒度</li>
+<li>防止对象逸出：切勿将内部对象返回给外部</li>
+</ul>
+<h3 id="4-2-资源复用"><a href="#4-2-资源复用" class="headerlink" title="4.2 资源复用"></a>4.2 资源复用</h3><p>资源复用常见的是单例模式和对象池。对象池有许多种类，如数据库连接池、线程池，如何设计一个线程池也是有趣的问题（TODO：线程池设计），要考虑核心线程池大小、最大大小、阻塞队列设计（有限无限）、拒绝策略、线程存活时间（长时间未使用要回收）。</p>
+<h3 id="4-3-数据结构"><a href="#4-3-数据结构" class="headerlink" title="4.3 数据结构"></a>4.3 数据结构</h3><p>优化存储结构，合理使用Redis的存储类型，选择合适的MySQl引擎</p>
+<h3 id="4-4-垃圾回收"><a href="#4-4-垃圾回收" class="headerlink" title="4.4 垃圾回收"></a>4.4 垃圾回收</h3><p>如Java中要对JVM调优和内存泄漏，这里经验不多，改日填坑（TODO：JVM调优）</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>《大型网站技术架构:核心原理与案例分析》</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2018/09/11/Web前端性能优化/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1959,7 +2126,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1972,7 +2139,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

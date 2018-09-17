@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="《高性能MySQL》,自定义变量," />
+  <meta name="keywords" content="优化," />
 
 
 
@@ -95,18 +95,18 @@
 
 
 
-<meta name="description" content="前言最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。下面的话大部分是从书上搬下来的。 限制有些场景我们不能使用自定义变量  使用自定义变量的查询，无法使用查询缓存 不能在使用常量或者标识符的地方使用自定义变量，例如表名、列名、和LIMIT子句中 用户自定义变量的生命周期是在一个连接中有效，所以不能用它们来做连接间的通信">
-<meta name="keywords" content="《高性能MySQL》,自定义变量">
+<meta name="description" content="前言网站的业务逻辑都部署在应用服务器上，是主要优化的地方，优化的常见方式是缓存、集群、异步等。 1.分布式缓存缓存的使用无处不在，ORM框架中的多级缓存，MVC框架中的模板缓存，浏览器缓存，几乎任何框架都提供了缓存功能。  网站性能优化第一定律：优先考虑使用缓存优化性能  1.1 缓存的基本原理简单而言都是KV，即Key-Value形式，在这之上有Key-Key-Value形式（Redis的Sor">
+<meta name="keywords" content="优化">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL自定义变量小结">
-<meta property="og:url" content="http://litianming1024.github.io/2017/12/05/MySQL自定义变量小结/index.html">
+<meta property="og:title" content="应用服务器性能优化">
+<meta property="og:url" content="http://litianming1024.github.io/2018/09/18/应用服务器性能优化/index.html">
 <meta property="og:site_name" content="天明的小窝">
-<meta property="og:description" content="前言最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。下面的话大部分是从书上搬下来的。 限制有些场景我们不能使用自定义变量  使用自定义变量的查询，无法使用查询缓存 不能在使用常量或者标识符的地方使用自定义变量，例如表名、列名、和LIMIT子句中 用户自定义变量的生命周期是在一个连接中有效，所以不能用它们来做连接间的通信">
+<meta property="og:description" content="前言网站的业务逻辑都部署在应用服务器上，是主要优化的地方，优化的常见方式是缓存、集群、异步等。 1.分布式缓存缓存的使用无处不在，ORM框架中的多级缓存，MVC框架中的模板缓存，浏览器缓存，几乎任何框架都提供了缓存功能。  网站性能优化第一定律：优先考虑使用缓存优化性能  1.1 缓存的基本原理简单而言都是KV，即Key-Value形式，在这之上有Key-Key-Value形式（Redis的Sor">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-07T12:59:33.000Z">
+<meta property="og:updated_time" content="2018-09-17T16:46:04.865Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL自定义变量小结">
-<meta name="twitter:description" content="前言最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。下面的话大部分是从书上搬下来的。 限制有些场景我们不能使用自定义变量  使用自定义变量的查询，无法使用查询缓存 不能在使用常量或者标识符的地方使用自定义变量，例如表名、列名、和LIMIT子句中 用户自定义变量的生命周期是在一个连接中有效，所以不能用它们来做连接间的通信">
+<meta name="twitter:title" content="应用服务器性能优化">
+<meta name="twitter:description" content="前言网站的业务逻辑都部署在应用服务器上，是主要优化的地方，优化的常见方式是缓存、集群、异步等。 1.分布式缓存缓存的使用无处不在，ORM框架中的多级缓存，MVC框架中的模板缓存，浏览器缓存，几乎任何框架都提供了缓存功能。  网站性能优化第一定律：优先考虑使用缓存优化性能  1.1 缓存的基本原理简单而言都是KV，即Key-Value形式，在这之上有Key-Key-Value形式（Redis的Sor">
 
 
 
@@ -136,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://litianming1024.github.io/2017/12/05/MySQL自定义变量小结/"/>
+  <link rel="canonical" href="http://litianming1024.github.io/2018/09/18/应用服务器性能优化/"/>
 
 
 
 
 
-  <title>MySQL自定义变量小结 | 天明的小窝</title>
+  <title>应用服务器性能优化 | 天明的小窝</title>
   
 
 
@@ -268,7 +268,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/12/05/MySQL自定义变量小结/">
+    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2018/09/18/应用服务器性能优化/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="天明">
@@ -285,7 +285,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MySQL自定义变量小结</h1>
+          <h1 class="post-title" itemprop="name headline">应用服务器性能优化</h1>
         
 
         <div class="post-meta">
@@ -297,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-05T16:59:32+08:00">
-                2017-12-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-18T00:44:48+08:00">
+                2018-09-18
               </time>
             
 
@@ -315,7 +315,7 @@
 
           
           
-             <span id="/2017/12/05/MySQL自定义变量小结/" class="leancloud_visitors" data-flag-title="MySQL自定义变量小结">
+             <span id="/2018/09/18/应用服务器性能优化/" class="leancloud_visitors" data-flag-title="应用服务器性能优化">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -346,43 +346,43 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近阅读《高性能MySQL》，有不少收获。用户自定义变量是一个可以用来存储内容的临时容器，在连接MySQL的整个过程中都存在。下面的话大部分是从书上搬下来的。</p>
-<h1 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h1><p>有些场景我们不能使用自定义变量</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>网站的业务逻辑都部署在应用服务器上，是主要优化的地方，优化的常见方式是缓存、集群、异步等。</p>
+<h2 id="1-分布式缓存"><a href="#1-分布式缓存" class="headerlink" title="1.分布式缓存"></a>1.分布式缓存</h2><p>缓存的使用无处不在，ORM框架中的多级缓存，MVC框架中的模板缓存，浏览器缓存，几乎任何框架都提供了缓存功能。</p>
+<blockquote>
+<p>网站性能优化第一定律：优先考虑使用缓存优化性能</p>
+</blockquote>
+<h3 id="1-1-缓存的基本原理"><a href="#1-1-缓存的基本原理" class="headerlink" title="1.1 缓存的基本原理"></a>1.1 缓存的基本原理</h3><p>简单而言都是KV，即Key-Value形式，在这之上有Key-Key-Value形式（Redis的Sorted Set，TODO：Reids数据结构实现原理），用的最多还是KV。KV中的Value可以是任意类型，也可以存放系列化后的二进制数据。</p>
+<p>Java中的hashCode方法可以得到hashcode，这里要说的知识点很多，equals和hashCode任一方法重写都需要重写，准确的说是必须，不然会影响集合类的使用。null对象也是有哈希值的，是0！只有HashTable直接使用hashCode的值，其余都会再扰动计算。只有HashMap允许key或者value为空情况出现，ConcurrentHashMap和淘汰的HashTable都不允许，因为多线程环境无法区分key是put时为null还是key不存在，而且null作为key很容易受到攻击。SynchronizedMap因为可以包装HashMap而可以支持，但是原理和HashTable一样，锁粒度太大导致性能都很差。（TODO：Java并发集合）</p>
+<h3 id="1-2-合理使用缓存"><a href="#1-2-合理使用缓存" class="headerlink" title="1.2 合理使用缓存"></a>1.2 合理使用缓存</h3><ul>
+<li>频繁修改的数据不适用缓存：读写比小于2：1</li>
+<li>热点访问数据适合缓存：尽量保证缓存高频访问的数据</li>
+<li>数据不一致与脏读：设置合理的缓存更新策略，一般为缓存设置失效时间</li>
+<li>缓存可用性：保证缓存服务的稳定，通过分布式集群等</li>
+<li>缓存预热：针对热点数据缓存，比如利用LRU算法等需要较长时间，可以提前人工加载热点数据</li>
+<li>缓存穿透、缓存雪崩、缓存击穿：使用缓存的经典问题，见<a href="https://litianming1024.github.io/2018/09/02/缓存使用系列">缓存使用</a></li>
+</ul>
+<h3 id="1-3-分布式缓存"><a href="#1-3-分布式缓存" class="headerlink" title="1.3 分布式缓存"></a>1.3 分布式缓存</h3><p>分布式缓存指缓存部署在多个服务器组成的集群中，以集群方式提供缓存服务，其架构方式有两种。一种是以JBoss Cache为代表的需要更新同步的分布式缓存，一种是以Memcached为代表的不互相通信的分布式缓存（TODO：Memcached以后填坑）。</p>
+<h2 id="2-异步操作"><a href="#2-异步操作" class="headerlink" title="2. 异步操作"></a>2. 异步操作</h2><p>很多情况下使用异步操作可以改善网站性能，使用消息队列的常见作用就是削峰填谷，将部分操作异步避免前面业务的等待，同时要注意不要把所有后续业务的处理都放在单一的业务逻辑中。如注册后的发邮件就可以放入消息队列，后续处理交由邮件发送消费者。使用消息队列要注意重放攻击，对于哪些操作能放入消息队列，生产者处理失败如何处理要有规定。</p>
+<blockquote>
+<p>任何可以晚点做的事情都应该晚点再做</p>
+</blockquote>
+<h2 id="3-使用集群"><a href="#3-使用集群" class="headerlink" title="3. 使用集群"></a>3. 使用集群</h2><p>在高并发场景下使用负载均衡技术，通过多台服务器为应用构建集群是最简单的方式。请求太多怎么办，上机器！单一的机器受各种限制，配合微服务使用应用集群能够有效处理并发。</p>
+<h2 id="4-代码优化"><a href="#4-代码优化" class="headerlink" title="4. 代码优化"></a>4. 代码优化</h2><p>代码写的烂再多的机器都不一定能救。不同代码的优化方式有别，诸如Java从Web容器，ORM框架选择，JDK本身的优化，JVM调优等。</p>
+<h3 id="4-1-多线程"><a href="#4-1-多线程" class="headerlink" title="4.1 多线程"></a>4.1 多线程</h3><p>多线程是基本的措施，但要考虑<strong>线程安全</strong>问题。使用多线程的原因主要是<strong>IO阻塞</strong>与<strong>多CPU</strong>，当线程进行IO处理时会被阻塞，这时CPU会被释放可以调度其它线程。</p>
+<p>网站的应用程序都是被Web服务器容器管理，不论时Web服务器容器管理的线程还是应用程序自己创建的线程，都不易过多，线程切换虽然比进程切换快，但是过多的线程会带来调度问题。通常启动的线程数：</p>
+<p>启动线程数＝［任务执行时间/（任务执行时间（IO等待时间）］］* CPU内核数</p>
+<p>最佳启动线程数和CPU内核数量成正比，和IO阻塞时间成反比。</p>
+<p>多线程带来线程安全问题，常见的解决手段有，我会单独写一片effective java读后感（TODO：线程安全）：</p>
 <ul>
-<li>使用自定义变量的查询，无法使用查询缓存</li>
-<li>不能在使用常量或者标识符的地方使用自定义变量，例如表名、列名、和LIMIT子句中</li>
-<li>用户自定义变量的生命周期是在一个连接中有效，所以不能用它们来做连接间的通信</li>
-<li>如果使用连接池或者持久话连接，自定义变量可能让看起来毫无关系的代码发生交互（如果是这样，通常是代码bug或者连接池bug，这类情况确实可能发生，前面是书上原话，此处存疑）</li>
-<li>在5.0之前的版本，是大小写敏感的，所以要注意代码在不同MySQL版本间的兼容性问题</li>
-<li>不能显示地声明自定义变量的类型。确定未定义变量的具体类型的时机在不同MySQL版本中也可能不一样。用户自定义变量的类型在赋值的时候会改变，MySQL的用户自定义变量是一个动态类型，最好定义时就赋初值</li>
-<li>MySQL优化器在某些场景下可能会将这些变量优化掉，这可能导致代码不按预想的方式运行</li>
-<li>复制的顺序和赋值的时间点并不总是固定的，这依赖于优化器的决定。实际情况可能很让人困惑</li>
-<li>赋值符号:=的优先级非常低，所以需要注意，赋值表达式应该使用明确的括号</li>
-<li>使用未定义变量不会产生任何语法错误</li>
+<li>对象设计为无状态：无状态对象肯定时线程安全的</li>
+<li>使用局部对象：被多线程访问的对象会出现可见性问题，因为工作内存中的对象是共享内存的拷贝</li>
+<li>并发访问资源使用锁：强一致性要加锁，并合理降低锁的粒度</li>
+<li>防止对象逸出：切勿将内部对象返回给外部</li>
 </ul>
-<h1 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h1><h2 id="1-优化排名语句"><a href="#1-优化排名语句" class="headerlink" title="1.优化排名语句"></a>1.优化排名语句</h2><p>用户自定义变量可以在给一个变量赋值的同时使用这个变量。用户自定义变量具有“左值”的特性。<br>来简单的实现一个rownumber的功能：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SET @rownum := 0;</div><div class="line">SELECT actor_id, @rownum := @rownum + 1 AS rownum FROM actor;</div></pre></td></tr></table></figure></p>
-<p>书中还给了一个复杂的例子来演示排名的写法，Leetcode的练习题中也有类似例子<a href="https://leetcode.com/problems/rank-scores/description/" target="_blank" rel="external">178. Rank Scores</a></p>
-<h2 id="2-避免重复查询刚刚更新的数据"><a href="#2-避免重复查询刚刚更新的数据" class="headerlink" title="2.避免重复查询刚刚更新的数据"></a>2.避免重复查询刚刚更新的数据</h2><p>例如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">UPDATE t1 SET lastUpdated = NOW() WHERE id = 1;</div><div class="line">SELECT lastUpdated FROM t1 FROM id = 1;</div></pre></td></tr></table></figure></p>
-<p>使用变量，可以改写为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">UPDATE t1 SET lastUpdated = NOW() WHERE id = 1 AND @now := NOW();</div><div class="line">SELECT @now;</div></pre></td></tr></table></figure></p>
-<p>改写后仍需要两个查询，需要两次网络来回，但是无需访问任何数据表</p>
-<h2 id="3-统计更新和插入的数量"><a href="#3-统计更新和插入的数量" class="headerlink" title="3.统计更新和插入的数量"></a>3.统计更新和插入的数量</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">INSERT INTO t1(c1, c2) VALUES(4, 4), (2,1), (3,1) ON DUPLICATE KEY UPDATE c1 = VALUES(c1) + (0 * (@x := @x + 1));</div></pre></td></tr></table></figure>
-<p>这个写法十分巧妙，每次由于冲突导致更新时对变量@x自增一次，然后再乘0来避免影响要更新的内容。同时MySQL的协议会返回被更改的总行数，所以不需要单独统计这个值。</p>
-<h2 id="4-确定取值的顺序"><a href="#4-确定取值的顺序" class="headerlink" title="4.确定取值的顺序"></a>4.确定取值的顺序</h2><p>用户自定义变量的一个最常见问题是没有注意到在赋值和读取变量的时候可能是在查询的不同阶段。<br>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SET @rownum := 0;</div><div class="line">SELECT actor_id, @rownum := @rownum + 1 as cnt</div><div class="line">FROM actor</div><div class="line">WHERE @rownum &lt;= 1</div></pre></td></tr></table></figure></p>
-<p>结果只返回了两条结果，似乎符合预期（实际读取变量和赋值不在同一阶段，但是没有影响到结果）。而<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">SET @rownum := 0;</div><div class="line">SELECT actor_id, @rownum := @rownum + 1 as cnt</div><div class="line">FROM actor</div><div class="line">WHERE @rownum &lt;= 1</div><div class="line">ORDER BY first_name;</div></pre></td></tr></table></figure></p>
-<p>却返回了200条结果，而且有cnt超过1的条目，通过explain语句我们发现<br><br>using filesort是造成这个问题的原因，WHERE条件是在文件排序操作之前取值的（ORDER BY导致一次性选取了所有满足WHERE条件的语句，换句话说，WHERE处的@rownum只读取了一次，值为0，所有数据都符合条件，WHERE执行在SELECT之前，之后不停给@rownum赋新值，我是这样理解的）。如果first_name有索引则结果正常，使用了覆盖索引并且没有触发filesort。</p>
-<h2 id="5-编写偷懒的UNION"><a href="#5-编写偷懒的UNION" class="headerlink" title="5.编写偷懒的UNION"></a>5.编写偷懒的UNION</h2><p>下面的查询会在两个地方查找一个用户——一个用户表，一个长时间不活跃的用户表，不活跃的用户表的目的是为了实现更高效的归档：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SELECT id FROM users WHERE id = 123</div><div class="line">UNION ALL</div><div class="line">SELECT id FROM users_archived WHERE id = 123;</div></pre></td></tr></table></figure></p>
-<p>上面的查询即使在users表中已经找到了记录，也还是会去users_archived中再查找一次。我们可以用UNION查询来抑制，只有当第一个表中没有数据时，才在第二个表中查询。只要在第一个表中找到记录就定义一个变量@found通过在结果列中做一次赋值来实现，然后将赋值放在函数GREATEST中来避免返回额外的数据。为了明确结果来自哪一个表，新增了一个包含表名的列。最后需要在查询的末尾将变量重置为NULL，保证遍历时不干扰后面的结果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SELECT GREATEST(@found := −1, id) AS id, &apos;users&apos; AS which_tbl</div><div class="line">FROM users WHERE id = 1</div><div class="line">UNION ALL</div><div class="line">SELECT id, &apos;users_archived&apos;FROM users_archived WHERE id = 1 AND @found IS NULL</div><div class="line">UNION ALL</div><div class="line">SELECT 1, &apos;reset&apos; FROM DUAL WHERE ( @found := NULL ) IS NOT NULL;</div></pre></td></tr></table></figure></p>
-<h2 id="6-用户自定义变量的其他用处"><a href="#6-用户自定义变量的其他用处" class="headerlink" title="6.用户自定义变量的其他用处"></a>6.用户自定义变量的其他用处</h2><ul>
-<li>查询运行是计算总数和平均值</li>
-<li>模拟GROUP语句中的函数FITST()和LAST()</li>
-<li>对大量数据做一些数据计算</li>
-<li>计算一个大表的MD5散列值</li>
-<li>编写一个样本处理函数，当样本中的数值超过某个边界值的时候将其变成0</li>
-<li>模拟读/写游标</li>
-<li>在SHOW语句的WHERE子句中加入变量值</li>
-</ul>
-<h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7.总结"></a>7.总结</h2><p>先了解SQL语句的执行顺序才能读懂这部分，其他用处我还没有试验。</p>
-<h2 id="8-参考资料"><a href="#8-参考资料" class="headerlink" title="8.参考资料"></a>8.参考资料</h2><p>《高性能MySQL》</p>
+<h3 id="4-2-资源复用"><a href="#4-2-资源复用" class="headerlink" title="4.2 资源复用"></a>4.2 资源复用</h3><p>资源复用常见的是单例模式和对象池。对象池有许多种类，如数据库连接池、线程池，如何设计一个线程池也是有趣的问题（TODO：线程池设计），要考虑核心线程池大小、最大大小、阻塞队列设计（有限无限）、拒绝策略、线程存活时间（长时间未使用要回收）。</p>
+<h3 id="4-3-数据结构"><a href="#4-3-数据结构" class="headerlink" title="4.3 数据结构"></a>4.3 数据结构</h3><p>优化存储结构，合理使用Redis的存储类型，选择合适的MySQl引擎</p>
+<h3 id="4-4-垃圾回收"><a href="#4-4-垃圾回收" class="headerlink" title="4.4 垃圾回收"></a>4.4 垃圾回收</h3><p>如Java中要对JVM调优和内存泄漏，这里经验不多，改日填坑（TODO：JVM调优）</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>《大型网站技术架构:核心原理与案例分析》</p>
 
       
     </div>
@@ -400,9 +400,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/《高性能MySQL》/" rel="tag"># 《高性能MySQL》</a>
-          
-            <a href="/tags/自定义变量/" rel="tag"># 自定义变量</a>
+            <a href="/tags/优化/" rel="tag"># 优化</a>
           
         </div>
       
@@ -415,8 +413,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/17/我的校招之路才刚刚开始/" rel="next" title="我的校招之路才刚刚开始">
-                <i class="fa fa-chevron-left"></i> 我的校招之路才刚刚开始
+              <a href="/2018/09/11/Web前端性能优化/" rel="next" title="Web前端性能优化">
+                <i class="fa fa-chevron-left"></i> Web前端性能优化
               </a>
             
           </div>
@@ -424,10 +422,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/08/23/Maven学习笔记/" rel="prev" title="Maven学习笔记">
-                Maven学习笔记 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -561,7 +555,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#限制"><span class="nav-number">2.</span> <span class="nav-text">限制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#适用场景"><span class="nav-number">3.</span> <span class="nav-text">适用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-优化排名语句"><span class="nav-number">3.1.</span> <span class="nav-text">1.优化排名语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-避免重复查询刚刚更新的数据"><span class="nav-number">3.2.</span> <span class="nav-text">2.避免重复查询刚刚更新的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-统计更新和插入的数量"><span class="nav-number">3.3.</span> <span class="nav-text">3.统计更新和插入的数量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-确定取值的顺序"><span class="nav-number">3.4.</span> <span class="nav-text">4.确定取值的顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-编写偷懒的UNION"><span class="nav-number">3.5.</span> <span class="nav-text">5.编写偷懒的UNION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-用户自定义变量的其他用处"><span class="nav-number">3.6.</span> <span class="nav-text">6.用户自定义变量的其他用处</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-总结"><span class="nav-number">3.7.</span> <span class="nav-text">7.总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-参考资料"><span class="nav-number">3.8.</span> <span class="nav-text">8.参考资料</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-分布式缓存"><span class="nav-number">2.</span> <span class="nav-text">1.分布式缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-缓存的基本原理"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 缓存的基本原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-合理使用缓存"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 合理使用缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-分布式缓存"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 分布式缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-异步操作"><span class="nav-number">3.</span> <span class="nav-text">2. 异步操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-使用集群"><span class="nav-number">4.</span> <span class="nav-text">3. 使用集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-代码优化"><span class="nav-number">5.</span> <span class="nav-text">4. 代码优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-多线程"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 多线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-资源复用"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 资源复用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-数据结构"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-垃圾回收"><span class="nav-number">5.4.</span> <span class="nav-text">4.4 垃圾回收</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
 
           </div>
