@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="SQL,数据库," />
+  <meta name="keywords" content="限流,漏桶算法,令牌桶算法," />
 
 
 
@@ -95,18 +95,21 @@
 
 
 
-<meta name="description" content="引言SQL语句执行顺序是面试中的基础考点，理解SQL对于优化排错有重大的作用,这里从两篇文章摘取部分重要的内容 SQL查询步骤总结123456789(8)SELECT (9) DISTINCT (11) &amp;lt;TOP_specification&amp;gt; &amp;lt;select_list&amp;gt;(1) FROM &amp;lt;left_table&amp;gt;(3) &amp;lt;join_type&amp;gt; JOIN">
-<meta name="keywords" content="SQL,数据库">
+<meta name="description" content="前言上周是收获最多的一周，先是被大佬套路如何排查问题，之后又一脚踩进Go的坑中，最后又见识了用户各种薅羊毛的路数。在系统设计中，通常要要秉承两条原则：  上层保护下层，作为主调方要从参数，流量等保护下层接口，面对架构复杂即使不能保护下层接口，也要有保护的意识 下层不信任上层，作为被调方要对接收的参数验证，来源验证，防止被恶意攻击。在内部系统中参数还好控制，一旦暴露在外部，什么牛鬼蛇神都能传进来。要">
+<meta name="keywords" content="限流,漏桶算法,令牌桶算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SQL语句执行顺序">
-<meta property="og:url" content="http://litianming1024.github.io/2017/09/24/SQL语句执行顺序/index.html">
+<meta property="og:title" content="限流算法">
+<meta property="og:url" content="http://litianming1024.github.io/2018/09/24/限流算法/index.html">
 <meta property="og:site_name" content="天明的小窝">
-<meta property="og:description" content="引言SQL语句执行顺序是面试中的基础考点，理解SQL对于优化排错有重大的作用,这里从两篇文章摘取部分重要的内容 SQL查询步骤总结123456789(8)SELECT (9) DISTINCT (11) &amp;lt;TOP_specification&amp;gt; &amp;lt;select_list&amp;gt;(1) FROM &amp;lt;left_table&amp;gt;(3) &amp;lt;join_type&amp;gt; JOIN">
+<meta property="og:description" content="前言上周是收获最多的一周，先是被大佬套路如何排查问题，之后又一脚踩进Go的坑中，最后又见识了用户各种薅羊毛的路数。在系统设计中，通常要要秉承两条原则：  上层保护下层，作为主调方要从参数，流量等保护下层接口，面对架构复杂即使不能保护下层接口，也要有保护的意识 下层不信任上层，作为被调方要对接收的参数验证，来源验证，防止被恶意攻击。在内部系统中参数还好控制，一旦暴露在外部，什么牛鬼蛇神都能传进来。要">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-24T16:17:20.000Z">
+<meta property="og:image" content="http://litianming1024.github.io/2018/09/24/限流算法/Leaky_bucket_analogy.jpg">
+<meta property="og:image" content="http://litianming1024.github.io/2018/09/24/限流算法/令牌桶.png">
+<meta property="og:updated_time" content="2018-09-24T16:02:27.475Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SQL语句执行顺序">
-<meta name="twitter:description" content="引言SQL语句执行顺序是面试中的基础考点，理解SQL对于优化排错有重大的作用,这里从两篇文章摘取部分重要的内容 SQL查询步骤总结123456789(8)SELECT (9) DISTINCT (11) &amp;lt;TOP_specification&amp;gt; &amp;lt;select_list&amp;gt;(1) FROM &amp;lt;left_table&amp;gt;(3) &amp;lt;join_type&amp;gt; JOIN">
+<meta name="twitter:title" content="限流算法">
+<meta name="twitter:description" content="前言上周是收获最多的一周，先是被大佬套路如何排查问题，之后又一脚踩进Go的坑中，最后又见识了用户各种薅羊毛的路数。在系统设计中，通常要要秉承两条原则：  上层保护下层，作为主调方要从参数，流量等保护下层接口，面对架构复杂即使不能保护下层接口，也要有保护的意识 下层不信任上层，作为被调方要对接收的参数验证，来源验证，防止被恶意攻击。在内部系统中参数还好控制，一旦暴露在外部，什么牛鬼蛇神都能传进来。要">
+<meta name="twitter:image" content="http://litianming1024.github.io/2018/09/24/限流算法/Leaky_bucket_analogy.jpg">
 
 
 
@@ -136,13 +139,13 @@
 
 
 
-  <link rel="canonical" href="http://litianming1024.github.io/2017/09/24/SQL语句执行顺序/"/>
+  <link rel="canonical" href="http://litianming1024.github.io/2018/09/24/限流算法/"/>
 
 
 
 
 
-  <title>SQL语句执行顺序 | 天明的小窝</title>
+  <title>限流算法 | 天明的小窝</title>
   
 
 
@@ -268,7 +271,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/09/24/SQL语句执行顺序/">
+    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2018/09/24/限流算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="天明">
@@ -285,7 +288,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SQL语句执行顺序</h1>
+          <h1 class="post-title" itemprop="name headline">限流算法</h1>
         
 
         <div class="post-meta">
@@ -297,8 +300,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-24T23:07:11+08:00">
-                2017-09-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-24T17:57:32+08:00">
+                2018-09-24
               </time>
             
 
@@ -315,7 +318,7 @@
 
           
           
-             <span id="/2017/09/24/SQL语句执行顺序/" class="leancloud_visitors" data-flag-title="SQL语句执行顺序">
+             <span id="/2018/09/24/限流算法/" class="leancloud_visitors" data-flag-title="限流算法">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -346,23 +349,39 @@
       
 
       
-        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>SQL语句执行顺序是面试中的基础考点，理解SQL对于优化排错有重大的作用,这里从两篇文章摘取部分重要的内容</p>
-<h1 id="SQL查询步骤"><a href="#SQL查询步骤" class="headerlink" title="SQL查询步骤"></a>SQL查询步骤</h1><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">(8)SELECT (9) DISTINCT (11) &lt;TOP_specification&gt; &lt;select_list&gt;</div><div class="line">(1) FROM &lt;left_table&gt;</div><div class="line">(3) &lt;join_type&gt; JOIN &lt;right_table&gt;</div><div class="line">(2) ON &lt;join_condition&gt;</div><div class="line">(4) WHERE &lt;where_condition&gt;</div><div class="line">(5) GROUP BY &lt;group_by_list&gt;</div><div class="line">(6) WITH &#123;CUBE | ROLLUP&#125;</div><div class="line">(7) HAVING &lt;having_condition&gt;</div><div class="line">(10) ORDER BY &lt;order_by_list&gt;</div></pre></td></tr></table></figure>
-<p>这是对语句执行顺序的基本总结</p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol>
-<li>FROM：对FROM子句中的前两个表执行笛卡尔积(交叉联接)，生成虚拟表VT1。</li>
-<li>ON：对VT1应用ON筛选器，只有那些使为真才被插入到VT2。</li>
-<li>OUTER (JOIN):如果指定了OUTER JOIN(相对于CROSS JOIN或INNER JOIN)，保留表中未找到匹配的行将作为外部行添加到VT2，生成VT3。如果FROM子句包含两个以上的表，则对上一个联接生成的结果表和下一个表重复执行步骤1到步骤3，直到处理完所有的表位置。</li>
-<li>WHERE：对VT3应用WHERE筛选器，只有使为true的行才插入VT4。</li>
-<li>GROUP BY：按GROUP BY子句中的列列表对VT4中的行进行分组，生成VT5。</li>
-<li>CUTE|ROLLUP：把超组插入VT5，生成VT6。</li>
-<li>HAVING：对VT6应用HAVING筛选器，只有使为true的组插入到VT7。</li>
-<li>SELECT：处理SELECT列表，产生VT8。</li>
-<li>DISTINCT：将重复的行从VT8中删除，产品VT9。</li>
-<li>ORDER BY：将VT9中的行按ORDER BY子句中的列列表顺序，生成一个游标(VC10)。</li>
-<li>TOP：从VC10的开始处选择指定数量或比例的行，生成表VT11，并返回给调用者。</li>
-</ol>
-<h1 id="引用文章"><a href="#引用文章" class="headerlink" title="引用文章"></a>引用文章</h1><p><a href="http://www.jianshu.com/p/bb19b6b0fdc3" target="_blank" rel="external">sql语句执行顺序</a><br><a href="http://www.jellythink.com/archives/924" target="_blank" rel="external">SQL逻辑查询语句执行顺序</a></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上周是收获最多的一周，先是被大佬套路如何排查问题，之后又一脚踩进Go的坑中，最后又见识了用户各种薅羊毛的路数。在系统设计中，通常要要秉承两条原则：</p>
+<ul>
+<li>上层保护下层，作为主调方要从参数，流量等保护下层接口，面对架构复杂即使不能保护下层接口，也要有保护的意识</li>
+<li>下层不信任上层，作为被调方要对接收的参数验证，来源验证，防止被恶意攻击。在内部系统中参数还好控制，一旦暴露在外部，什么牛鬼蛇神都能传进来。要强调一句对于基本数据类型的范围一定要有一个认识，不只是2的n次方-1什么的，<strong>而是要具体到大约多少亿范围</strong>。在工作中发生过调用方传超出范围的字符串，而调用integer.parseint抛出runtime exception但没有方法catch导致调用超时无数据返回的情况。无数据返回在RPC调用中非常致命，只能等超时返回，严重降低并发。也就是说<strong>只要调用必须控制超时时间，执行异常必须返回信息，不能等待超时断开连接返回空</strong>。</li>
+</ul>
+<p>高并发系统中有三种常见方式来保护系统：缓存、降级和限流。缓存和降级在<a href="https://litianming1024.github.io/2018/09/02/%E7%BC%93%E5%AD%98%E4%BD%BF%E7%94%A8%E7%B3%BB%E5%88%97/">缓存使用系列</a>讲过了，这回来讲限流算法。</p>
+<p>常见的限流地方有：限制并发总数（数据库连接池、线程池、单ip并发数）、限制瞬时并发数、限制时间窗口内的平均速率等等。</p>
+<h2 id="1-限流算法"><a href="#1-限流算法" class="headerlink" title="1. 限流算法"></a>1. 限流算法</h2><h3 id="1-1-漏桶算法（leaky-bucket）"><a href="#1-1-漏桶算法（leaky-bucket）" class="headerlink" title="1.1 漏桶算法（leaky bucket）"></a>1.1 漏桶算法（leaky bucket）</h3><p>漏桶作为计量工具时，可以用于流量整形和流量控制，漏桶算法的描述如下：</p>
+<ul>
+<li>容量固定，按照固定速率流出水滴</li>
+<li>如果桶为空，则不流出水滴</li>
+<li>可以按照任意速率流入水滴到漏桶</li>
+<li>如果流入水滴超出了桶的容量，流入的水滴被丢弃，桶的容量不变<img src="/2018/09/24/限流算法/Leaky_bucket_analogy.jpg" alt="Leaky_bucket_analogy.jpg" title="">
+图来自维基百科</li>
+</ul>
+<h3 id="1-2-令牌桶算法（token-bucket）"><a href="#1-2-令牌桶算法（token-bucket）" class="headerlink" title="1.2 令牌桶算法（token bucket）"></a>1.2 令牌桶算法（token bucket）</h3><p>令牌桶算法是存放固定容量令牌的桶，按照固定速率往桶里添加令牌。令牌桶算法的描述如下：</p>
+<ul>
+<li>每 1/r 秒往桶中添加一个令牌</li>
+<li>桶中最多存放b个令牌，当桶满时新添加的令牌被丢弃</li>
+<li>当n个字节的数据包到达时<ul>
+<li>如果桶中存在多于n个令牌，删除n个令牌，将数据包发送到网络上</li>
+<li>不足n个令牌，不会删除令牌，数据包被丢弃或者放入缓冲区<img src="/2018/09/24/限流算法/令牌桶.png" alt="令牌桶.png" title="">
+图来自参考1</li>
+</ul>
+</li>
+</ul>
+<p>漏桶算法和令牌桶算法的区别：</p>
+<ul>
+<li>令牌桶算法允许一定程度的并发，只要桶中有令牌就可以。漏桶法通过限制常量流出速率从而平滑流入速率</li>
+<li>两个算法的实现可以一样，但是方向是相反的，对于相同参数得到的限流效果是一样的</li>
+</ul>
+<h3 id="1-2-计数器法和滑动窗口法"><a href="#1-2-计数器法和滑动窗口法" class="headerlink" title="1.2 计数器法和滑动窗口法"></a>1.2 计数器法和滑动窗口法</h3><p>计数器法相对其它算法是最容易实现的，当然各种场景下的计数器法都有致命问题，GC中的计数难以处理循环引用，这里的计数器面对临界值也有问题。比如我们统计1分钟内的访问次数，限制最多为100，每次有请求计数器加一，如果59秒时来了100个请求，1分钟时又来了100个请求，相当于2秒内来了200个请求，超出限制。有什么解决办法呢？想一想有什么协议也需要控制流量，TCP！TCP中的滑动窗口就是很好的实现方式。这里不再写了。可以参考链接里的第二篇</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://jinnianshilongnian.iteye.com/blog/2305117" target="_blank" rel="external">并发系统之限流特技</a><br><a href="http://www.kissyu.org/2016/08/13/%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" target="_blank" rel="external">接口限流算法总结</a></p>
 
       
     </div>
@@ -380,9 +399,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/SQL/" rel="tag"># SQL</a>
+            <a href="/tags/限流/" rel="tag"># 限流</a>
           
-            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+            <a href="/tags/漏桶算法/" rel="tag"># 漏桶算法</a>
+          
+            <a href="/tags/令牌桶算法/" rel="tag"># 令牌桶算法</a>
           
         </div>
       
@@ -395,8 +416,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/23/索引失效情况总结/" rel="next" title="索引失效情况总结">
-                <i class="fa fa-chevron-left"></i> 索引失效情况总结
+              <a href="/2018/09/18/应用服务器性能优化/" rel="next" title="应用服务器性能优化">
+                <i class="fa fa-chevron-left"></i> 应用服务器性能优化
               </a>
             
           </div>
@@ -404,10 +425,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/10/17/我的校招之路才刚刚开始/" rel="prev" title="我的校招之路才刚刚开始">
-                我的校招之路才刚刚开始 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -541,7 +558,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL查询步骤"><span class="nav-number">2.</span> <span class="nav-text">SQL查询步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.1.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.2.</span> <span class="nav-text">简介</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引用文章"><span class="nav-number">3.</span> <span class="nav-text">引用文章</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-限流算法"><span class="nav-number">2.</span> <span class="nav-text">1. 限流算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-漏桶算法（leaky-bucket）"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 漏桶算法（leaky bucket）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-令牌桶算法（token-bucket）"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 令牌桶算法（token bucket）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-计数器法和滑动窗口法"><span class="nav-number">2.3.</span> <span class="nav-text">1.2 计数器法和滑动窗口法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
 
           </div>

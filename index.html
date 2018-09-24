@@ -264,6 +264,169 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2018/09/24/限流算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天明">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="天明的小窝">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/24/限流算法/" itemprop="url">限流算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-24T17:57:32+08:00">
+                2018-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/09/24/限流算法/" class="leancloud_visitors" data-flag-title="限流算法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上周是收获最多的一周，先是被大佬套路如何排查问题，之后又一脚踩进Go的坑中，最后又见识了用户各种薅羊毛的路数。在系统设计中，通常要要秉承两条原则：</p>
+<ul>
+<li>上层保护下层，作为主调方要从参数，流量等保护下层接口，面对架构复杂即使不能保护下层接口，也要有保护的意识</li>
+<li>下层不信任上层，作为被调方要对接收的参数验证，来源验证，防止被恶意攻击。在内部系统中参数还好控制，一旦暴露在外部，什么牛鬼蛇神都能传进来。要强调一句对于基本数据类型的范围一定要有一个认识，不只是2的n次方-1什么的，<strong>而是要具体到大约多少亿范围</strong>。在工作中发生过调用方传超出范围的字符串，而调用integer.parseint抛出runtime exception但没有方法catch导致调用超时无数据返回的情况。无数据返回在RPC调用中非常致命，只能等超时返回，严重降低并发。也就是说<strong>只要调用必须控制超时时间，执行异常必须返回信息，不能等待超时断开连接返回空</strong>。</li>
+</ul>
+<p>高并发系统中有三种常见方式来保护系统：缓存、降级和限流。缓存和降级在<a href="https://litianming1024.github.io/2018/09/02/%E7%BC%93%E5%AD%98%E4%BD%BF%E7%94%A8%E7%B3%BB%E5%88%97/">缓存使用系列</a>讲过了，这回来讲限流算法。</p>
+<p>常见的限流地方有：限制并发总数（数据库连接池、线程池、单ip并发数）、限制瞬时并发数、限制时间窗口内的平均速率等等。</p>
+<h2 id="1-限流算法"><a href="#1-限流算法" class="headerlink" title="1. 限流算法"></a>1. 限流算法</h2><h3 id="1-1-漏桶算法（leaky-bucket）"><a href="#1-1-漏桶算法（leaky-bucket）" class="headerlink" title="1.1 漏桶算法（leaky bucket）"></a>1.1 漏桶算法（leaky bucket）</h3><p>漏桶作为计量工具时，可以用于流量整形和流量控制，漏桶算法的描述如下：</p>
+<ul>
+<li>容量固定，按照固定速率流出水滴</li>
+<li>如果桶为空，则不流出水滴</li>
+<li>可以按照任意速率流入水滴到漏桶</li>
+<li>如果流入水滴超出了桶的容量，流入的水滴被丢弃，桶的容量不变<img src="/2018/09/24/限流算法/Leaky_bucket_analogy.jpg" alt="Leaky_bucket_analogy.jpg" title="">
+图来自维基百科</li>
+</ul>
+<h3 id="1-2-令牌桶算法（token-bucket）"><a href="#1-2-令牌桶算法（token-bucket）" class="headerlink" title="1.2 令牌桶算法（token bucket）"></a>1.2 令牌桶算法（token bucket）</h3><p>令牌桶算法是存放固定容量令牌的桶，按照固定速率往桶里添加令牌。令牌桶算法的描述如下：</p>
+<ul>
+<li>每 1/r 秒往桶中添加一个令牌</li>
+<li>桶中最多存放b个令牌，当桶满时新添加的令牌被丢弃</li>
+<li>当n个字节的数据包到达时<ul>
+<li>如果桶中存在多于n个令牌，删除n个令牌，将数据包发送到网络上</li>
+<li>不足n个令牌，不会删除令牌，数据包被丢弃或者放入缓冲区<img src="/2018/09/24/限流算法/令牌桶.png" alt="令牌桶.png" title="">
+图来自参考1</li>
+</ul>
+</li>
+</ul>
+<p>漏桶算法和令牌桶算法的区别：</p>
+<ul>
+<li>令牌桶算法允许一定程度的并发，只要桶中有令牌就可以。漏桶法通过限制常量流出速率从而平滑流入速率</li>
+<li>两个算法的实现可以一样，但是方向是相反的，对于相同参数得到的限流效果是一样的</li>
+</ul>
+<h3 id="1-2-计数器法和滑动窗口法"><a href="#1-2-计数器法和滑动窗口法" class="headerlink" title="1.2 计数器法和滑动窗口法"></a>1.2 计数器法和滑动窗口法</h3><p>计数器法相对其它算法是最容易实现的，当然各种场景下的计数器法都有致命问题，GC中的计数难以处理循环引用，这里的计数器面对临界值也有问题。比如我们统计1分钟内的访问次数，限制最多为100，每次有请求计数器加一，如果59秒时来了100个请求，1分钟时又来了100个请求，相当于2秒内来了200个请求，超出限制。有什么解决办法呢？想一想有什么协议也需要控制流量，TCP！TCP中的滑动窗口就是很好的实现方式。这里不再写了。可以参考链接里的第二篇</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://jinnianshilongnian.iteye.com/blog/2305117" target="_blank" rel="external">并发系统之限流特技</a><br><a href="http://www.kissyu.org/2016/08/13/%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" target="_blank" rel="external">接口限流算法总结</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2018/09/18/应用服务器性能优化/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -351,7 +514,7 @@
 <blockquote>
 <p>网站性能优化第一定律：优先考虑使用缓存优化性能</p>
 </blockquote>
-<h3 id="1-1-缓存的基本原理"><a href="#1-1-缓存的基本原理" class="headerlink" title="1.1 缓存的基本原理"></a>1.1 缓存的基本原理</h3><p>简单而言都是KV，即Key-Value形式，在这之上有Key-Key-Value形式（Redis的Sorted Set，TODO：Reids数据结构实现原理），用的最多还是KV。KV中的Value可以是任意类型，也可以存放系列化后的二进制数据。</p>
+<h3 id="1-1-缓存的基本原理"><a href="#1-1-缓存的基本原理" class="headerlink" title="1.1 缓存的基本原理"></a>1.1 缓存的基本原理</h3><p>简单而言都是KV，即Key-Value形式，在这之上有Key-Key-Value形式（Redis的Sorted Set，TODO：Redis数据结构实现原理），用的最多还是KV。KV中的Value是二进制安全的。</p>
 <p>Java中的hashCode方法可以得到hashcode，这里要说的知识点很多，equals和hashCode任一方法重写都需要重写，准确的说是必须，不然会影响集合类的使用。null对象也是有哈希值的，是0！只有HashTable直接使用hashCode的值，其余都会再扰动计算。只有HashMap允许key或者value为空情况出现，ConcurrentHashMap和淘汰的HashTable都不允许，因为多线程环境无法区分key是put时为null还是key不存在，而且null作为key很容易受到攻击。SynchronizedMap因为可以包装HashMap而可以支持，但是原理和HashTable一样，锁粒度太大导致性能都很差。（TODO：Java并发集合）</p>
 <h3 id="1-2-合理使用缓存"><a href="#1-2-合理使用缓存" class="headerlink" title="1.2 合理使用缓存"></a>1.2 合理使用缓存</h3><ul>
 <li>频繁修改的数据不适用缓存：读写比小于2：1</li>
@@ -1946,144 +2109,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://litianming1024.github.io/2017/09/14/其实我的校招之路早就结束了/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="天明">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="天明的小窝">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/14/其实我的校招之路早就结束了/" itemprop="url">其实我的校招之路早就结束了</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T13:49:04+08:00">
-                2017-09-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/09/14/其实我的校招之路早就结束了/" class="leancloud_visitors" data-flag-title="其实我的校招之路早就结束了">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="项目之后"><a href="#项目之后" class="headerlink" title="项目之后"></a>项目之后</h2><p>我只参加过一个项目，在没有任何经验的情况下几乎独立负责微信后台的编写。由于线程不安全出现了读脏数据的问题，这个问题深深困扰着我，虽然有临时的解决办法，但我却不知道问题的根源。这之后我没有再接着参与项目，而是在寻找出问题的原因。查找很多资料没有找到原因，于是我决定从头开始，从出问题的地方，“单例”和项目中其它的问题入手，漫长的学习之路开始了。从《深入理解JVM》、《设计模式》、《Java并发编程的艺术》直到接近半年后才搞清楚了问题的根源。当初的代码有太多不合理的地方了，我当时的水平已经尽力了，但是还不够。现在看来要改起来原先的SSH框架都要改不少。往后便想自己写一个权限管理系统骗Star来社招，光element-admin这个就花了寒假整整的两个月，只写好了一个表格控件，结合Spring Security要改出的动态权限系统更是由于对Spring框架的理解不足，2个月都没有进展。现在暂时搁置。</p>
-<h2 id="微光"><a href="#微光" class="headerlink" title="微光"></a>微光</h2><p>原本为以为校招只有985/211能参加，我能走的路只有毕业三年后的社招，直到知乎关注的一位用户说校招不一定看学历，又看了一下面经，发现问的问题正是我经了项目后在学习的，我的学校里没有人注意，甚至是我怀疑学习方向是否正确的东西。这给了我莫大的鼓励。<br><img src="/2017/09/14/其实我的校招之路早就结束了/1.jpg" alt="1.jpg" title=""></p>
-<h2 id="刷题之路"><a href="#刷题之路" class="headerlink" title="刷题之路"></a>刷题之路</h2><p>直到此时我才发现我的课程里没有算法，DFS、BFS、回溯、动态规划我都不会，实习生的笔试编程题全部都是暴力去想。TCP的状态图根本不会画，没听说过B树，排序算法只会写冒泡，没有看过JDK源码，没有学过编译原理。唯一有的只是零散的知识，但此时正是3月，一切还来的及。我已经知道秋招无望了，我的目的只是想通过一场笔试，拿到面试的机会。刷题之路便开始了，我捡起了大一就注册但没有刷几道题的leetcode。<br><img src="/2017/09/14/其实我的校招之路早就结束了/2.jpg" alt="2.jpg" title=""></p>
-<h2 id="注定"><a href="#注定" class="headerlink" title="注定"></a>注定</h2><p>虽然秋招开始不久，但结果不出所料，笔试的几家应该都没有回应，编程题只能做1道多，虽然选择应该不会太差，但是笔试通过已无望，更何况有一些笔试机会都没有。如果没有当初追寻问题根源的坚持，面试的知识点我根本一点也不会，正是因为如此第一次看《Java编程思想》的一年半后我才终于看懂大部分，《Effective Java》也能看懂大部分，Sprimg MVC的源码也能看懂一部分。这一阶段是我能力增长最快的阶段，即便如此和大佬的差距还是太大。我很感谢牛客网，感谢上面答疑、分享资料的同学，也很感谢给我内推的同学。<br><img src="/2017/09/14/其实我的校招之路早就结束了/3.png" alt="3.png" title=""><br><img src="/2017/09/14/其实我的校招之路早就结束了/4.jpg" alt="4.jpg" title=""></p>
-<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>我能走的只有社招了，好好维护GitHub和博客。虽然很羡慕那些公司的技术氛围，可以有很多机会学习新的技术，不用像我这样搞前后端分离和Restful就要试好几个月，能接触高并发，有导师指导，不会走很多弯路。但实力的差距摆在那里，我不会放下追逐的脚步，3年后我会再来。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -2126,7 +2158,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2139,7 +2171,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

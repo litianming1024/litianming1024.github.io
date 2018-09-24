@@ -103,7 +103,7 @@
 <meta property="og:site_name" content="天明的小窝">
 <meta property="og:description" content="前言网站的业务逻辑都部署在应用服务器上，是主要优化的地方，优化的常见方式是缓存、集群、异步等。 1.分布式缓存缓存的使用无处不在，ORM框架中的多级缓存，MVC框架中的模板缓存，浏览器缓存，几乎任何框架都提供了缓存功能。  网站性能优化第一定律：优先考虑使用缓存优化性能  1.1 缓存的基本原理简单而言都是KV，即Key-Value形式，在这之上有Key-Key-Value形式（Redis的Sor">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-17T16:46:04.865Z">
+<meta property="og:updated_time" content="2018-09-24T08:32:10.969Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="应用服务器性能优化">
 <meta name="twitter:description" content="前言网站的业务逻辑都部署在应用服务器上，是主要优化的地方，优化的常见方式是缓存、集群、异步等。 1.分布式缓存缓存的使用无处不在，ORM框架中的多级缓存，MVC框架中的模板缓存，浏览器缓存，几乎任何框架都提供了缓存功能。  网站性能优化第一定律：优先考虑使用缓存优化性能  1.1 缓存的基本原理简单而言都是KV，即Key-Value形式，在这之上有Key-Key-Value形式（Redis的Sor">
@@ -351,7 +351,7 @@
 <blockquote>
 <p>网站性能优化第一定律：优先考虑使用缓存优化性能</p>
 </blockquote>
-<h3 id="1-1-缓存的基本原理"><a href="#1-1-缓存的基本原理" class="headerlink" title="1.1 缓存的基本原理"></a>1.1 缓存的基本原理</h3><p>简单而言都是KV，即Key-Value形式，在这之上有Key-Key-Value形式（Redis的Sorted Set，TODO：Reids数据结构实现原理），用的最多还是KV。KV中的Value可以是任意类型，也可以存放系列化后的二进制数据。</p>
+<h3 id="1-1-缓存的基本原理"><a href="#1-1-缓存的基本原理" class="headerlink" title="1.1 缓存的基本原理"></a>1.1 缓存的基本原理</h3><p>简单而言都是KV，即Key-Value形式，在这之上有Key-Key-Value形式（Redis的Sorted Set，TODO：Redis数据结构实现原理），用的最多还是KV。KV中的Value是二进制安全的。</p>
 <p>Java中的hashCode方法可以得到hashcode，这里要说的知识点很多，equals和hashCode任一方法重写都需要重写，准确的说是必须，不然会影响集合类的使用。null对象也是有哈希值的，是0！只有HashTable直接使用hashCode的值，其余都会再扰动计算。只有HashMap允许key或者value为空情况出现，ConcurrentHashMap和淘汰的HashTable都不允许，因为多线程环境无法区分key是put时为null还是key不存在，而且null作为key很容易受到攻击。SynchronizedMap因为可以包装HashMap而可以支持，但是原理和HashTable一样，锁粒度太大导致性能都很差。（TODO：Java并发集合）</p>
 <h3 id="1-2-合理使用缓存"><a href="#1-2-合理使用缓存" class="headerlink" title="1.2 合理使用缓存"></a>1.2 合理使用缓存</h3><ul>
 <li>频繁修改的数据不适用缓存：读写比小于2：1</li>
@@ -422,6 +422,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/24/限流算法/" rel="prev" title="限流算法">
+                限流算法 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -499,7 +503,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -512,7 +516,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
